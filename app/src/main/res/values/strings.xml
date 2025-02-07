@@ -1,6 +1,40 @@
 <resources>
     <string name="app_name">Dicoding Events</string>
+
+    <!-- menu -->
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_upcoming">Upcoming</string>
+    <string name="title_finished">Finished</string>
+
+    <!-- activity -->
+    <string name="activity_event_detail_register">Register</string>
+    <string name="activity_event_detail_image">Media Cover</string>
+    <string name="activity_event_detail_name">Name</string>
+    <string name="activity_event_detail_summary">Summary</string>
+    <string name="activity_event_detail_category">Category</string>
+    <string name="activity_event_detail_quota">Quota</string>
+    <string name="activity_event_detail_registrants">Registrants</string>
+    <string name="activity_event_detail_quota_remain">Quota Remain</string>
+    <string name="activity_event_detail_time">Time</string>
+    <string name="activity_event_detail_begin_time">Begin Time</string>
+    <string name="activity_event_detail_end_time">End Time</string>
+    <string name="activity_event_detail_owner">Owner</string>
+    <string name="activity_event_detail_location">Location</string>
+    <string name="activity_event_detail_link">Link</string>
+    <string name="activity_event_detail_description">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia similique delectus doloremque ipsa tenetur ducimus pariatur! Repudiandae distinctio dolores nesciunt?\n\n
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facilis odio voluptas debitis distinctio quam, exercitationem porro illum voluptatum aliquid aliquam nobis numquam, saepe, tempora aperiam dolor quisquam quia officiis sequi! Eum alias, maxime maiores nulla excepturi dolores vero sequi modi minus necessitatibus!\n\n
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo, quas omnis quibusdam at dicta ipsa a inventore placeat error, modi blanditiis totam? Officia, fugiat facere.\n\n
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem optio reiciendis voluptatem.
+    </string>
+
+    <!-- fragment -->
+    <string name="fragment_home_title">Dicoding Events</string>
+    <string name="fragment_home_upcoming">Upcoming Events</string>
+    <string name="fragment_home_finished">Finished Events</string>
+
+    <!-- resource -->
+    <string name="event_item_image">Image</string>
+    <string name="event_item_name">Event Name</string>
+    <string name="event_item_summary">Event Summary</string>
 </resources>

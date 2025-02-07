@@ -4,39 +4,117 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.ssamsara98.dicodingevents.databinding.FragmentHomeBinding
+import com.ssamsara98.dicodingevents.response.EventItem
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val homeViewModel by viewModels<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        this.showEvents()
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // private fun layoutType(type: String? = "list"): LayoutManager {
+    //     return when (type) {
+    //         "grid" -> GridLayoutManager(context, 2)
+    //         else -> LinearLayoutManager(context)
+    //     }
+    // }
+
+    // Dicoding Events
+    private fun showEvents() {
+        // val layoutManager: LinearLayoutManager = layoutType() as LinearLayoutManager
+        // val layoutManager = LinearLayoutManager(context)
+        // binding.rvEvents.layoutManager = layoutManager
+        // val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
+        // binding.rvEvents.addItemDecoration(itemDecoration)
+
+        val upcomingLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvUpcomingEvents.layoutManager = upcomingLayoutManager
+
+        val finishedLayoutManager =
+            LinearLayoutManager(context)
+        binding.rvFinishedEvents.layoutManager = finishedLayoutManager
+        val finishedItemDecoration =
+            DividerItemDecoration(context, finishedLayoutManager.orientation)
+        binding.rvFinishedEvents.addItemDecoration(finishedItemDecoration)
+
+        homeViewModel.isLoadingUpcoming.observe(viewLifecycleOwner) {
+            showUpcomingLoading(it)
+        }
+        homeViewModel.upcomingEventList.observe(viewLifecycleOwner) {
+            setUpcomingEventList(it)
+        }
+
+        homeViewModel.isLoadingFinished.observe(viewLifecycleOwner) {
+            showFinishedLoading(it)
+        }
+        homeViewModel.finishedEventList.observe(viewLifecycleOwner) {
+            setFinishedEventList(it)
+        }
+    }
+
+    private fun showUpcomingLoading(isLoading: Boolean) {
+        binding.upcomingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun setUpcomingEventList(upcomingEventList: List<EventItem>) {
+        val eventItemAdapter = UpcomingEventItemAdapter()
+        eventItemAdapter.submitList(upcomingEventList)
+        eventItemAdapter.setOnItemClickCallback(object :
+            UpcomingEventItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(view: View, data: EventItem) {
+                val toEventDetailActivity =
+                    HomeFragmentDirections.actionNavigationHomeToEventDetailActivity()
+                toEventDetailActivity.eventItem = data
+                view.findNavController().navigate(toEventDetailActivity)
+            }
+        })
+        binding.rvUpcomingEvents.adapter = eventItemAdapter
+    }
+
+    private fun showFinishedLoading(isLoading: Boolean) {
+        binding.finishedProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun setFinishedEventList(upcomingEventList: List<EventItem>) {
+        val eventItemAdapter = FinishedEventItemAdapter()
+        eventItemAdapter.submitList(upcomingEventList)
+        eventItemAdapter.setOnItemClickCallback(object :
+            FinishedEventItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(view: View, data: EventItem) {
+                val toEventDetailActivity =
+                    HomeFragmentDirections.actionNavigationHomeToEventDetailActivity()
+                toEventDetailActivity.eventItem = data
+                view.findNavController().navigate(toEventDetailActivity)
+            }
+        })
+        binding.rvFinishedEvents.adapter = eventItemAdapter
     }
 }
