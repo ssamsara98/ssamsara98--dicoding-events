@@ -37,36 +37,40 @@ class UpcomingFragment : Fragment() {
         _binding = null
     }
 
-    // Dicoding Events
     private fun showEvents() {
         val layoutManager = LinearLayoutManager(context)
         binding.rvEvents.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
         binding.rvEvents.addItemDecoration(itemDecoration)
 
-        upcomingViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            showLoading(isLoading)
+        upcomingViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
         }
-        upcomingViewModel.eventList.observe(viewLifecycleOwner) { event ->
-            setEventList(event)
+        upcomingViewModel.eventList.observe(viewLifecycleOwner) {
+            setEventList(it)
         }
-    }
-
-    private fun setEventList(upcomingEventItemList: List<EventItem>) {
-        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
-        upcomingEventItemAdapter.submitList(upcomingEventItemList)
-        upcomingEventItemAdapter.setOnItemClickCallback(object : UpcomingEventItemAdapter.OnItemClickCallback {
-            override fun onItemClicked(view: View, data: EventItem) {
-                val toEventDetailActivity =
-                    UpcomingFragmentDirections.actionNavigationUpcomingToEventDetailActivity()
-                toEventDetailActivity.eventItem = data
-                view.findNavController().navigate(toEventDetailActivity)
-            }
-        })
-        binding.rvEvents.adapter = upcomingEventItemAdapter
     }
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun setEventList(upcomingEventItemList: List<EventItem>) {
+        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
+
+        upcomingEventItemAdapter.apply {
+            this.submitList(upcomingEventItemList)
+            this.setOnItemClickCallback(object :
+                UpcomingEventItemAdapter.OnItemClickCallback {
+                override fun onItemClicked(view: View, data: EventItem) {
+                    val toEventDetailActivity =
+                        UpcomingFragmentDirections.actionNavigationUpcomingToEventDetailActivity()
+                    toEventDetailActivity.eventItem = data
+                    view.findNavController().navigate(toEventDetailActivity)
+                }
+            })
+        }
+
+        binding.rvEvents.adapter = upcomingEventItemAdapter
     }
 }

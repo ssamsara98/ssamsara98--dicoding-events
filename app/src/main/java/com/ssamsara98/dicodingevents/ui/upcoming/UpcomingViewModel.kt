@@ -25,7 +25,7 @@ class UpcomingViewModel : ViewModel() {
 
     private fun fetchUpcomingEventList() {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getEventList(active = 1)
+        val client = ApiConfig.getApiService().getEventList()
         val callback = object : Callback<EventsResponse> {
             override fun onResponse(
                 call: Call<EventsResponse>,
@@ -40,7 +40,10 @@ class UpcomingViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
+            override fun onFailure(
+                call: Call<EventsResponse>,
+                t: Throwable
+            ) {
                 _isLoading.value = false
                 Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
             }

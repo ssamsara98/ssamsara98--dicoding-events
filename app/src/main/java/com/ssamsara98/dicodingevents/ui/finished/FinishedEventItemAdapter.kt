@@ -10,7 +10,8 @@ import com.bumptech.glide.Glide
 import com.ssamsara98.dicodingevents.databinding.FinishedEventItemBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 
-class FinishedEventItemAdapter : ListAdapter<EventItem, FinishedEventItemAdapter.ViewHolder>(DIFF_CALLBACK) {
+class FinishedEventItemAdapter :
+    ListAdapter<EventItem, FinishedEventItemAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EventItem>() {
@@ -25,7 +26,8 @@ class FinishedEventItemAdapter : ListAdapter<EventItem, FinishedEventItemAdapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = FinishedEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            FinishedEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

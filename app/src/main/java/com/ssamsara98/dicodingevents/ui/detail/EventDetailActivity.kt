@@ -1,6 +1,5 @@
 package com.ssamsara98.dicodingevents.ui.detail
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,9 +10,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.ssamsara98.dicodingevents.databinding.ActivityEventDetailBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EventDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventDetailBinding
@@ -25,18 +28,18 @@ class EventDetailActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        this.actionBar?.hide()
+        this.supportActionBar?.hide()
 
         detailEventViewModel.isLoading.observe(this) {
             showLoading(it)
         }
-
         detailEventViewModel.eventItem.observe(this) {
             setEventItem(it)
         }
@@ -47,12 +50,16 @@ class EventDetailActivity : AppCompatActivity() {
             else null
         val eventItem = args?.eventItem
         if (eventItem != null) {
-            detailEventViewModel.changeEventItem(eventItem)
+            lifecycleScope.launch(Dispatchers.Default) {
+                withContext(Dispatchers.Main) {
+                    detailEventViewModel.changeEventItem(eventItem)
+                }
+            }
         }
     }
 
-    // event detail
     private fun showLoading(isLoading: Boolean) {
+        binding.layoutMain.visibility = if (isLoading) View.GONE else View.VISIBLE
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
@@ -76,8 +83,6 @@ class EventDetailActivity : AppCompatActivity() {
         binding.tvRegistrants.text = registrants
         binding.tvQuotaRemain.text = quotaRemain
         binding.tvTime.text = time
-        // binding.tvBeginTime.text = eventItem.beginTime
-        // binding.tvEndTime.text = eventItem.endTime
         binding.tvOwner.text = owner
         binding.tvLocation.text = location
         binding.tvDescription.text =

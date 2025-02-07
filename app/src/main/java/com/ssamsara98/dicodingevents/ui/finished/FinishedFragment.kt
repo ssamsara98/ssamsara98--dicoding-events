@@ -40,11 +40,11 @@ class FinishedFragment : Fragment() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.rvEvents.layoutManager = layoutManager
 
-        finishedViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            showLoading(isLoading)
+        finishedViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
         }
-        finishedViewModel.eventListFinished.observe(viewLifecycleOwner) { event ->
-            setEventList(event)
+        finishedViewModel.eventListFinished.observe(viewLifecycleOwner) {
+            setEventList(it)
         }
     }
 
@@ -54,6 +54,7 @@ class FinishedFragment : Fragment() {
 
     private fun setEventList(finishedEventItemList: List<EventItem>?) {
         val finishedEventItemAdapter = FinishedEventItemAdapter()
+
         finishedEventItemAdapter.apply {
             this.submitList(finishedEventItemList)
             this.setOnItemClickCallback(object : FinishedEventItemAdapter.OnItemClickCallback {
@@ -65,6 +66,7 @@ class FinishedFragment : Fragment() {
                 }
             })
         }
+
         binding.rvEvents.adapter = finishedEventItemAdapter
     }
 }

@@ -10,7 +10,8 @@ import com.bumptech.glide.Glide
 import com.ssamsara98.dicodingevents.databinding.UpcomingEventItemBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 
-class UpcomingEventItemAdapter : ListAdapter<EventItem, UpcomingEventItemAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class UpcomingEventItemAdapter :
+    ListAdapter<EventItem, UpcomingEventItemAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EventItem>() {
@@ -24,12 +25,13 @@ class UpcomingEventItemAdapter : ListAdapter<EventItem, UpcomingEventItemAdapter
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = UpcomingEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding =
+            UpcomingEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val eventItem = getItem(position)
         holder.bind(eventItem)
         holder.itemView.setOnClickListener { view ->
@@ -37,7 +39,7 @@ class UpcomingEventItemAdapter : ListAdapter<EventItem, UpcomingEventItemAdapter
         }
     }
 
-    class MyViewHolder(private val binding: UpcomingEventItemBinding) :
+    class ViewHolder(private val binding: UpcomingEventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventItem) {
             binding.tvEventName.text = eventItem.name

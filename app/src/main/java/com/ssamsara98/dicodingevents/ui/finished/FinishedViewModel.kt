@@ -41,7 +41,10 @@ class FinishedViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
+            override fun onFailure(
+                call: Call<EventsResponse>,
+                t: Throwable
+            ) {
                 _isLoading.value = false
                 Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
             }

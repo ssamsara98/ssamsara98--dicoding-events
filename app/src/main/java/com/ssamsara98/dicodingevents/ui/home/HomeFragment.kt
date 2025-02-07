@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.ssamsara98.dicodingevents.databinding.FragmentHomeBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 
@@ -39,21 +37,7 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    // private fun layoutType(type: String? = "list"): LayoutManager {
-    //     return when (type) {
-    //         "grid" -> GridLayoutManager(context, 2)
-    //         else -> LinearLayoutManager(context)
-    //     }
-    // }
-
-    // Dicoding Events
     private fun showEvents() {
-        // val layoutManager: LinearLayoutManager = layoutType() as LinearLayoutManager
-        // val layoutManager = LinearLayoutManager(context)
-        // binding.rvEvents.layoutManager = layoutManager
-        // val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
-        // binding.rvEvents.addItemDecoration(itemDecoration)
-
         val upcomingLayoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvUpcomingEvents.layoutManager = upcomingLayoutManager
