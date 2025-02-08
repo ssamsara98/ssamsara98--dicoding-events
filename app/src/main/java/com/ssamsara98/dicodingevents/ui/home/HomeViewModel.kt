@@ -43,7 +43,8 @@ class HomeViewModel : ViewModel() {
 
     private fun fetchUpcomingEventList() {
         _isLoadingUpcoming.value = true
-        val client = ApiConfig.getApiService().getEventList(limit = 10)
+        val client = ApiConfig.getApiService().getEventList(1, 5)
+
         val callback = object : Callback<EventsResponse> {
             override fun onResponse(
                 call: Call<EventsResponse>,
@@ -70,7 +71,8 @@ class HomeViewModel : ViewModel() {
 
     private fun fetchFinishedEventList() {
         _isLoadingFinished.value = true
-        val client = ApiConfig.getApiService().getEventList()
+        val client = ApiConfig.getApiService().getEventList(0, 5)
+
         val callback = object : Callback<EventsResponse> {
             override fun onResponse(
                 call: Call<EventsResponse>,

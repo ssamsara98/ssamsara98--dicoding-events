@@ -34,7 +34,8 @@ class FinishedViewModel : ViewModel() {
 
     private fun fetchFinishedEventList() {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getEventList(active = 0)
+        val client = ApiConfig.getApiService().getEventList(0)
+
         val callback = object : Callback<EventsResponse> {
             override fun onResponse(
                 call: Call<EventsResponse>,

@@ -26,6 +26,7 @@ class SearchViewModel : ViewModel() {
     fun fetchSearch(q: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getEventList(-1, query = q)
+
         val callback = object : Callback<EventsResponse> {
             override fun onResponse(
                 call: Call<EventsResponse>,

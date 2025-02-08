@@ -27,13 +27,14 @@ class UpcomingViewModel : ViewModel() {
         fetchUpcomingEventList()
     }
 
-    fun load(){
+    fun load() {
         fetchUpcomingEventList()
     }
 
     private fun fetchUpcomingEventList() {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getEventList()
+        val client = ApiConfig.getApiService().getEventList(1)
+
         val callback = object : Callback<EventsResponse> {
             override fun onResponse(
                 call: Call<EventsResponse>,
