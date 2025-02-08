@@ -32,5 +32,4 @@
         app:layout_constraintEnd_toEndOf="@+id/rv_events"
         app:layout_constraintStart_toStartOf="@+id/rv_events"
         app:layout_constraintTop_toTopOf="@+id/rv_events" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

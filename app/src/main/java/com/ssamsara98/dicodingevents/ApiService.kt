@@ -16,13 +16,4 @@ interface ApiService {
     fun getEventById(
         @Path("id") id: String
     ): Call<EventsResponse>
-
-    // @FormUrlEncoded
-    // @Headers("Authorization: token 12345")
-    // @POST("review")
-    // fun postReview(
-    //     @Field("id") id: String,
-    //     @Field("name") name: String,
-    //     @Field("review") review: String
-    // ): Call<T>
 }
