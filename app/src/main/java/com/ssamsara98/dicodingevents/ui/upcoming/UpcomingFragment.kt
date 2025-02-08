@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentUpcomingBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 
@@ -45,6 +46,11 @@ class UpcomingFragment : Fragment() {
 
         upcomingViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
+        }
+        upcomingViewModel.snackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
+            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
+                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+            }
         }
         upcomingViewModel.eventList.observe(viewLifecycleOwner) {
             setEventList(it)

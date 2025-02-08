@@ -13,9 +13,10 @@
 
         <ImageView
             android:id="@+id/iv_image_logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="124dp"
+            android:layout_height="124dp"
             android:contentDescription="@string/event_item_image"
+            android:padding="4dp"
             android:scaleType="centerCrop"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -24,11 +25,12 @@
             tools:srcCompat="@android:drawable/ic_menu_gallery" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_image_logo"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -39,9 +41,9 @@
                 android:layout_marginVertical="4dp"
                 android:layout_weight="1"
                 android:ellipsize="none"
+                android:maxLines="3"
                 android:scrollHorizontally="false"
                 android:text="@string/event_item_name"
-
                 android:textSize="14sp"
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toTopOf="@id/tv_event_summary"
@@ -55,6 +57,7 @@
                 android:layout_marginVertical="4dp"
                 android:layout_weight="1"
                 android:ellipsize="none"
+                android:maxLines="3"
                 android:scrollHorizontally="false"
                 android:text="@string/event_item_summary"
                 android:textSize="12sp"

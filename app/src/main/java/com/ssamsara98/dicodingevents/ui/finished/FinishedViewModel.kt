@@ -8,6 +8,7 @@ import com.ssamsara98.dicodingevents.ApiConfig
 import com.ssamsara98.dicodingevents.response.EventItem
 import com.ssamsara98.dicodingevents.response.EventsResponse
 import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingViewModel
+import com.ssamsara98.dicodingevents.util.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +20,9 @@ class FinishedViewModel : ViewModel() {
 
     private val _eventListFinished = MutableLiveData<List<EventItem>>()
     val eventListFinished: LiveData<List<EventItem>> = _eventListFinished
+
+    private val _snackBarTextFailed = MutableLiveData<Event<String>>()
+    val snackBarTextFailed: LiveData<Event<String>> = _snackBarTextFailed
 
     init {
         fetchFinishedEventList()
@@ -37,6 +41,7 @@ class FinishedViewModel : ViewModel() {
                     val body = response.body()
                     _eventListFinished.value = body?.listEvents
                 } else {
+                    _snackBarTextFailed.value = Event("onFailure: ${response.message()}")
                     Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${response.message()}")
                 }
             }
@@ -46,6 +51,7 @@ class FinishedViewModel : ViewModel() {
                 t: Throwable
             ) {
                 _isLoading.value = false
+                _snackBarTextFailed.value = Event("onFailure: ${t.message.toString()}")
                 Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
             }
         }

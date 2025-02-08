@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentFinishedBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 
@@ -42,6 +43,11 @@ class FinishedFragment : Fragment() {
 
         finishedViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
+        }
+        finishedViewModel.snackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
+            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
+                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+            }
         }
         finishedViewModel.eventListFinished.observe(viewLifecycleOwner) {
             setEventList(it)

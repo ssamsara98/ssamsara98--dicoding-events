@@ -30,12 +30,10 @@ class EventDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
             insets
         }
-
-        this.supportActionBar?.hide()
 
         detailEventViewModel.isLoading.observe(this) {
             showLoading(it)
@@ -53,6 +51,14 @@ class EventDetailActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
                     detailEventViewModel.changeEventItem(eventItem)
+                }
+            }
+        }
+
+        binding.root.setOnRefreshListener {
+            lifecycleScope.launch(Dispatchers.Default) {
+                withContext(Dispatchers.Main) {
+                    detailEventViewModel.fetchEvent()
                 }
             }
         }

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentHomeBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 
@@ -52,12 +53,22 @@ class HomeFragment : Fragment() {
         homeViewModel.isLoadingUpcoming.observe(viewLifecycleOwner) {
             showUpcomingLoading(it)
         }
+        homeViewModel.upcomingSnackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
+            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
+                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+            }
+        }
         homeViewModel.upcomingEventList.observe(viewLifecycleOwner) {
             setUpcomingEventList(it)
         }
 
         homeViewModel.isLoadingFinished.observe(viewLifecycleOwner) {
             showFinishedLoading(it)
+        }
+        homeViewModel.finishedSnackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
+            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
+                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+            }
         }
         homeViewModel.finishedEventList.observe(viewLifecycleOwner) {
             setFinishedEventList(it)
@@ -70,16 +81,20 @@ class HomeFragment : Fragment() {
 
     private fun setUpcomingEventList(upcomingEventList: List<EventItem>) {
         val eventItemAdapter = UpcomingEventItemAdapter()
-        eventItemAdapter.submitList(upcomingEventList)
-        eventItemAdapter.setOnItemClickCallback(object :
-            UpcomingEventItemAdapter.OnItemClickCallback {
-            override fun onItemClicked(view: View, data: EventItem) {
-                val toEventDetailActivity =
-                    HomeFragmentDirections.actionNavigationHomeToEventDetailActivity()
-                toEventDetailActivity.eventItem = data
-                view.findNavController().navigate(toEventDetailActivity)
-            }
-        })
+
+        eventItemAdapter.apply {
+            this.submitList(upcomingEventList)
+            this.setOnItemClickCallback(object :
+                UpcomingEventItemAdapter.OnItemClickCallback {
+                override fun onItemClicked(view: View, data: EventItem) {
+                    val toEventDetailActivity =
+                        HomeFragmentDirections.actionNavigationHomeToEventDetailActivity()
+                    toEventDetailActivity.eventItem = data
+                    view.findNavController().navigate(toEventDetailActivity)
+                }
+            })
+        }
+
         binding.rvUpcomingEvents.adapter = eventItemAdapter
     }
 

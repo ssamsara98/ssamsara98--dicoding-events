@@ -9,7 +9,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="4dp">
 
         <ImageView
             android:id="@+id/iv_image_logo"
@@ -27,6 +28,9 @@
             android:id="@+id/tv_event_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:maxLines="3"
             android:text="@string/event_item_name"
             android:textSize="14sp"
             android:textStyle="bold|italic"
