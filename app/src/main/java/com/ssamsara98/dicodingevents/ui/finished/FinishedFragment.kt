@@ -31,17 +31,6 @@ class FinishedFragment : Fragment() {
         _binding = FragmentFinishedBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.showEvents()
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun showEvents() {
         binding.root.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
@@ -54,14 +43,21 @@ class FinishedFragment : Fragment() {
         finishedViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
-        finishedViewModel.snackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
-            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+        finishedViewModel.snackBarTextFailed.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { content ->
+                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
             }
         }
         finishedViewModel.eventListFinished.observe(viewLifecycleOwner) {
             setEventList(it)
         }
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun showLoading(isLoading: Boolean) {

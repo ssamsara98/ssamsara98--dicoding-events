@@ -60,7 +60,10 @@ class HomeViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
+            override fun onFailure(
+                call: Call<EventsResponse>,
+                t: Throwable
+            ) {
                 _isLoadingUpcoming.value = false
                 _upcomingSnackBarTextFailed.value = Event("onFailure: ${t.message.toString()}")
                 Log.e(HomeViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
@@ -88,7 +91,10 @@ class HomeViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
+            override fun onFailure(
+                call: Call<EventsResponse>,
+                t: Throwable
+            ) {
                 _isLoadingFinished.value = false
                 _finishedSnackBarTextFailed.value = Event("onFailure: ${t.message.toString()}")
                 Log.e(HomeViewModel::class.simpleName, "onFailure: ${t.message.toString()}")

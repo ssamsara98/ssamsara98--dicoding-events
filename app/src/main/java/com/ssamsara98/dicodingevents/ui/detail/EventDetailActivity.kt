@@ -27,18 +27,6 @@ class EventDetailActivity : AppCompatActivity() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        detailEventViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-        detailEventViewModel.eventItem.observe(this) {
-            setEventItem(it)
-        }
-        detailEventViewModel.snackBarTextFailed.observe(this) { snackBarTextFailed ->
-            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
-            }
-        }
-
         val extras = intent.extras
         val args =
             if (extras != null) EventDetailActivityArgs.fromBundle(extras)
@@ -58,6 +46,18 @@ class EventDetailActivity : AppCompatActivity() {
                         binding.swipeRefresh.isRefreshing = false
                     }
                 }
+            }
+        }
+
+        detailEventViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+        detailEventViewModel.eventItem.observe(this) {
+            setEventItem(it)
+        }
+        detailEventViewModel.snackBarTextFailed.observe(this) {
+            it.getContentIfNotHandled()?.let { content ->
+                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

@@ -32,17 +32,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.showEvents()
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun showEvents() {
         binding.root.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
@@ -55,9 +44,9 @@ class HomeFragment : Fragment() {
         homeViewModel.isLoadingUpcoming.observe(viewLifecycleOwner) {
             showUpcomingLoading(it)
         }
-        homeViewModel.upcomingSnackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
-            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+        homeViewModel.upcomingSnackBarTextFailed.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { content ->
+                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
             }
         }
         homeViewModel.upcomingEventList.observe(viewLifecycleOwner) {
@@ -67,14 +56,21 @@ class HomeFragment : Fragment() {
         homeViewModel.isLoadingFinished.observe(viewLifecycleOwner) {
             showFinishedLoading(it)
         }
-        homeViewModel.finishedSnackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
-            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+        homeViewModel.finishedSnackBarTextFailed.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { content ->
+                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
             }
         }
         homeViewModel.finishedEventList.observe(viewLifecycleOwner) {
             setFinishedEventList(it)
         }
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun showUpcomingLoading(isLoading: Boolean) {
@@ -86,8 +82,8 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvUpcomingEvents.layoutManager = upcomingLayoutManager
 
-        val eventItemAdapter = UpcomingEventItemAdapter()
-        eventItemAdapter.apply {
+        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
+        upcomingEventItemAdapter.apply {
             this.submitList(upcomingEventList)
             this.setOnItemClickCallback(object :
                 UpcomingEventItemAdapter.OnItemClickCallback {
@@ -100,23 +96,23 @@ class HomeFragment : Fragment() {
             })
         }
 
-        binding.rvUpcomingEvents.adapter = eventItemAdapter
+        binding.rvUpcomingEvents.adapter = upcomingEventItemAdapter
     }
 
     private fun showFinishedLoading(isLoading: Boolean) {
         binding.finishedProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setFinishedEventList(upcomingEventList: List<EventItem>) {
+    private fun setFinishedEventList(finishedEventList: List<EventItem>) {
         val finishedLayoutManager = LinearLayoutManager(context)
         binding.rvFinishedEvents.layoutManager = finishedLayoutManager
         val finishedItemDecoration =
             DividerItemDecoration(context, finishedLayoutManager.orientation)
         binding.rvFinishedEvents.addItemDecoration(finishedItemDecoration)
 
-        val eventItemAdapter = FinishedEventItemAdapter()
-        eventItemAdapter.apply {
-            this.submitList(upcomingEventList)
+        val finishedEventItemAdapter = FinishedEventItemAdapter()
+        finishedEventItemAdapter.apply {
+            this.submitList(finishedEventList)
             this.setOnItemClickCallback(object :
                 FinishedEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
@@ -128,6 +124,6 @@ class HomeFragment : Fragment() {
             })
         }
 
-        binding.rvFinishedEvents.adapter = eventItemAdapter
+        binding.rvFinishedEvents.adapter = finishedEventItemAdapter
     }
 }

@@ -11,7 +11,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.ssamsara98.dicodingevents.R
 import com.ssamsara98.dicodingevents.databinding.FragmentUpcomingBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 import kotlinx.coroutines.Dispatchers
@@ -33,17 +32,6 @@ class UpcomingFragment : Fragment() {
         _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.showEvents()
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun showEvents() {
         binding.root.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
@@ -56,14 +44,21 @@ class UpcomingFragment : Fragment() {
         upcomingViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
-        upcomingViewModel.snackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
-            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+        upcomingViewModel.snackBarTextFailed.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { content ->
+                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
             }
         }
         upcomingViewModel.eventList.observe(viewLifecycleOwner) {
             setEventList(it)
         }
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun showLoading(isLoading: Boolean) {

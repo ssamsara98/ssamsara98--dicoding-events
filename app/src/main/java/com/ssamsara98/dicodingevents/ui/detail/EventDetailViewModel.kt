@@ -43,7 +43,6 @@ class EventDetailViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     val body = response.body()
-                    // _eventItem.value = body?.listEvents
                     _eventItem.value = body?.event
                 } else {
                     _snackBarTextFailed.value = Event("onFailure: ${response.message()}")

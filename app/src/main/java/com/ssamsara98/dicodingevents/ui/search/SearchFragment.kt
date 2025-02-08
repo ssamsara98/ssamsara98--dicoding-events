@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentSearchBinding
 import com.ssamsara98.dicodingevents.response.EventItem
-import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingEventItemAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchFragment : Fragment() {
 
@@ -30,12 +33,16 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.root.setOnRefreshListener {
+            binding.root.isRefreshing = false
+        }
+
         searchViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
-        searchViewModel.snackBarTextFailed.observe(viewLifecycleOwner) { snackBarTextFailed ->
-            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+        searchViewModel.snackBarTextFailed.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { content ->
+                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
             }
         }
         searchViewModel.eventList.observe(viewLifecycleOwner) {
@@ -47,7 +54,6 @@ class SearchFragment : Fragment() {
 
             this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean = true
-
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (query == null) return false
                     searchViewModel.fetchSearch(query)
@@ -68,17 +74,16 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setEventList(upcomingEventItemList: List<EventItem>) {
+    private fun setEventList(eventItemList: List<EventItem>) {
         val layoutManager = LinearLayoutManager(context)
         binding.rvEvents.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
         binding.rvEvents.addItemDecoration(itemDecoration)
 
-        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
-        upcomingEventItemAdapter.apply {
-            this.submitList(upcomingEventItemList)
-            this.setOnItemClickCallback(object :
-                UpcomingEventItemAdapter.OnItemClickCallback {
+        val searchEventItemAdapter = SearchEventItemAdapter()
+        searchEventItemAdapter.apply {
+            this.submitList(eventItemList)
+            this.setOnItemClickCallback(object : SearchEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
                     val toEventDetailActivity =
                         SearchFragmentDirections.actionNavigationSearchToEventDetailActivity()
@@ -88,6 +93,6 @@ class SearchFragment : Fragment() {
             })
         }
 
-        binding.rvEvents.adapter = upcomingEventItemAdapter
+        binding.rvEvents.adapter = searchEventItemAdapter
     }
 }

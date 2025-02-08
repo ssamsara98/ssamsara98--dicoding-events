@@ -42,7 +42,10 @@ class SearchViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
+            override fun onFailure(
+                call: Call<EventsResponse>,
+                t: Throwable
+            ) {
                 _isLoading.value = false
                 _snackBarTextFailed.value = Event("onFailure: ${t.message.toString()}")
                 Log.e(HomeViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
