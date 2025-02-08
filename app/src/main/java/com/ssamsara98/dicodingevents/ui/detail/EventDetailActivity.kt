@@ -27,15 +27,6 @@ class EventDetailActivity : AppCompatActivity() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.setOnRefreshListener {
-            lifecycleScope.launch(Dispatchers.Default) {
-                withContext(Dispatchers.Main) {
-                    detailEventViewModel.fetchEvent()
-                    binding.root.isRefreshing = false
-                }
-            }
-        }
-
         detailEventViewModel.isLoading.observe(this) {
             showLoading(it)
         }
@@ -57,6 +48,15 @@ class EventDetailActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
                     detailEventViewModel.changeEventItem(eventItem)
+                }
+            }
+
+            binding.swipeRefresh.setOnRefreshListener {
+                lifecycleScope.launch(Dispatchers.Default) {
+                    withContext(Dispatchers.Main) {
+                        detailEventViewModel.fetchEvent(eventItem.id.toString())
+                        binding.swipeRefresh.isRefreshing = false
+                    }
                 }
             }
         }

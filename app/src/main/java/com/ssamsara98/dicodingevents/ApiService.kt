@@ -1,6 +1,7 @@
 package com.ssamsara98.dicodingevents
 
 import com.ssamsara98.dicodingevents.response.EventsResponse
+import com.ssamsara98.dicodingevents.response.EventResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -15,5 +16,5 @@ interface ApiService {
     @GET("/events/{id}")
     fun getEventById(
         @Path("id") id: String
-    ): Call<EventsResponse>
+    ): Call<EventResponse>
 }

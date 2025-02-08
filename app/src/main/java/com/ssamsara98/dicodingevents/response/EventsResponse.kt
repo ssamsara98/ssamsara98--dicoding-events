@@ -18,6 +18,19 @@ data class EventsResponse(
 ) : Parcelable
 
 @Parcelize
+data class EventResponse(
+
+    @field:SerializedName("error")
+    val error: Boolean,
+
+    @field:SerializedName("message")
+    val message: String,
+
+    @field:SerializedName("listEvents")
+    val event: EventItem? = null,
+) : Parcelable
+
+@Parcelize
 data class EventItem(
 
     @field:SerializedName("id")
