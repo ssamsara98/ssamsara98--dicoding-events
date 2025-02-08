@@ -33,6 +33,10 @@ class HomeViewModel : ViewModel() {
     val finishedSnackBarTextFailed: LiveData<Event<String>> = _finishedSnackBarTextFailed
 
     init {
+        load()
+    }
+
+    fun load() {
         fetchUpcomingEventList()
         fetchFinishedEventList()
     }

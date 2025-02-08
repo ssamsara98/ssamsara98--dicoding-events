@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.ActivityEventDetailBinding
 import com.ssamsara98.dicodingevents.response.EventItem
 import kotlinx.coroutines.Dispatchers
@@ -35,11 +36,25 @@ class EventDetailActivity : AppCompatActivity() {
             insets
         }
 
+        binding.root.setOnRefreshListener {
+            lifecycleScope.launch(Dispatchers.Default) {
+                withContext(Dispatchers.Main) {
+                    detailEventViewModel.fetchEvent()
+                    binding.root.isRefreshing = false
+                }
+            }
+        }
+
         detailEventViewModel.isLoading.observe(this) {
             showLoading(it)
         }
         detailEventViewModel.eventItem.observe(this) {
             setEventItem(it)
+        }
+        detailEventViewModel.snackBarTextFailed.observe(this) { snackBarTextFailed ->
+            snackBarTextFailed.getContentIfNotHandled()?.let { snackBarText ->
+                Snackbar.make(binding.root, snackBarText, Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         val extras = intent.extras
@@ -51,14 +66,6 @@ class EventDetailActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
                     detailEventViewModel.changeEventItem(eventItem)
-                }
-            }
-        }
-
-        binding.root.setOnRefreshListener {
-            lifecycleScope.launch(Dispatchers.Default) {
-                withContext(Dispatchers.Main) {
-                    detailEventViewModel.fetchEvent()
                 }
             }
         }

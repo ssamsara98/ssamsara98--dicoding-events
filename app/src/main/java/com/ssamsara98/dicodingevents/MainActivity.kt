@@ -23,11 +23,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            insets
-        }
+        // ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        //     val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        //     v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+        //     insets
+        // }
 
         val navView: BottomNavigationView = binding.navView
 

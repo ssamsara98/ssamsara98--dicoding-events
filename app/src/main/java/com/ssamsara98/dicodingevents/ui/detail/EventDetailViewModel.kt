@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ssamsara98.dicodingevents.response.EventItem
 import com.ssamsara98.dicodingevents.util.Event
 import kotlinx.coroutines.delay
+import kotlin.math.floor
 
 class EventDetailViewModel : ViewModel() {
 
@@ -27,6 +28,11 @@ class EventDetailViewModel : ViewModel() {
     suspend fun fetchEvent() {
         _isLoading.value = true
         delay(2000)
+
+        if (floor(Math.random() * 3).toInt() == 0) {
+            _snackBarTextFailed.value = Event("Something went wrong...")
+        }
+
         _isLoading.value = false
     }
 }

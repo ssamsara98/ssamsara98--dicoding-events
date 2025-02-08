@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentHomeBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
@@ -39,16 +43,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun showEvents() {
-        val upcomingLayoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvUpcomingEvents.layoutManager = upcomingLayoutManager
-
-        val finishedLayoutManager =
-            LinearLayoutManager(context)
-        binding.rvFinishedEvents.layoutManager = finishedLayoutManager
-        val finishedItemDecoration =
-            DividerItemDecoration(context, finishedLayoutManager.orientation)
-        binding.rvFinishedEvents.addItemDecoration(finishedItemDecoration)
+        binding.root.setOnRefreshListener {
+            lifecycleScope.launch(Dispatchers.Default) {
+                withContext(Dispatchers.Main) {
+                    homeViewModel.load()
+                    binding.root.isRefreshing = false
+                }
+            }
+        }
 
         homeViewModel.isLoadingUpcoming.observe(viewLifecycleOwner) {
             showUpcomingLoading(it)
@@ -80,8 +82,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpcomingEventList(upcomingEventList: List<EventItem>) {
-        val eventItemAdapter = UpcomingEventItemAdapter()
+        val upcomingLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvUpcomingEvents.layoutManager = upcomingLayoutManager
 
+        val eventItemAdapter = UpcomingEventItemAdapter()
         eventItemAdapter.apply {
             this.submitList(upcomingEventList)
             this.setOnItemClickCallback(object :
@@ -103,17 +108,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun setFinishedEventList(upcomingEventList: List<EventItem>) {
+        val finishedLayoutManager = LinearLayoutManager(context)
+        binding.rvFinishedEvents.layoutManager = finishedLayoutManager
+        val finishedItemDecoration =
+            DividerItemDecoration(context, finishedLayoutManager.orientation)
+        binding.rvFinishedEvents.addItemDecoration(finishedItemDecoration)
+
         val eventItemAdapter = FinishedEventItemAdapter()
-        eventItemAdapter.submitList(upcomingEventList)
-        eventItemAdapter.setOnItemClickCallback(object :
-            FinishedEventItemAdapter.OnItemClickCallback {
-            override fun onItemClicked(view: View, data: EventItem) {
-                val toEventDetailActivity =
-                    HomeFragmentDirections.actionNavigationHomeToEventDetailActivity()
-                toEventDetailActivity.eventItem = data
-                view.findNavController().navigate(toEventDetailActivity)
-            }
-        })
+        eventItemAdapter.apply {
+            this.submitList(upcomingEventList)
+            this.setOnItemClickCallback(object :
+                FinishedEventItemAdapter.OnItemClickCallback {
+                override fun onItemClicked(view: View, data: EventItem) {
+                    val toEventDetailActivity =
+                        HomeFragmentDirections.actionNavigationHomeToEventDetailActivity()
+                    toEventDetailActivity.eventItem = data
+                    view.findNavController().navigate(toEventDetailActivity)
+                }
+            })
+        }
+
         binding.rvFinishedEvents.adapter = eventItemAdapter
     }
 }

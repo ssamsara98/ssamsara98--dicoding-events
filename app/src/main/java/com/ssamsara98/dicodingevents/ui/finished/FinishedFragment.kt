@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentFinishedBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FinishedFragment : Fragment() {
 
@@ -38,8 +42,14 @@ class FinishedFragment : Fragment() {
     }
 
     private fun showEvents() {
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding.rvEvents.layoutManager = layoutManager
+        binding.root.setOnRefreshListener {
+            lifecycleScope.launch(Dispatchers.Default) {
+                withContext(Dispatchers.Main) {
+                    finishedViewModel.load()
+                    binding.root.isRefreshing = false
+                }
+            }
+        }
 
         finishedViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
@@ -58,9 +68,11 @@ class FinishedFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setEventList(finishedEventItemList: List<EventItem>?) {
-        val finishedEventItemAdapter = FinishedEventItemAdapter()
+    private fun setEventList(finishedEventItemList: List<EventItem>) {
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.rvEvents.layoutManager = layoutManager
 
+        val finishedEventItemAdapter = FinishedEventItemAdapter()
         finishedEventItemAdapter.apply {
             this.submitList(finishedEventItemList)
             this.setOnItemClickCallback(object : FinishedEventItemAdapter.OnItemClickCallback {

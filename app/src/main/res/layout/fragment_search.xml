@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
     tools:context=".ui.search.SearchFragment">
 
     <androidx.appcompat.widget.SearchView
@@ -14,15 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/rv_events"
-        app:layout_constraintEnd_toEndOf="@+id/rv_events"
-        app:layout_constraintStart_toStartOf="@+id/rv_events"
-        app:layout_constraintTop_toTopOf="@+id/rv_events" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_events"
         android:layout_width="match_parent"
@@ -31,5 +23,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sv_query" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/rv_events"
+        app:layout_constraintEnd_toEndOf="@+id/rv_events"
+        app:layout_constraintStart_toStartOf="@+id/rv_events"
+        app:layout_constraintTop_toTopOf="@+id/rv_events" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

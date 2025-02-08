@@ -27,6 +27,10 @@ class UpcomingViewModel : ViewModel() {
         fetchUpcomingEventList()
     }
 
+    fun load(){
+        fetchUpcomingEventList()
+    }
+
     private fun fetchUpcomingEventList() {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getEventList()

@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.ssamsara98.dicodingevents.R
 import com.ssamsara98.dicodingevents.databinding.FragmentUpcomingBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UpcomingFragment : Fragment() {
 
@@ -39,10 +44,14 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun showEvents() {
-        val layoutManager = LinearLayoutManager(context)
-        binding.rvEvents.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
-        binding.rvEvents.addItemDecoration(itemDecoration)
+        binding.root.setOnRefreshListener {
+            lifecycleScope.launch(Dispatchers.Default) {
+                withContext(Dispatchers.Main) {
+                    upcomingViewModel.load()
+                    binding.root.isRefreshing = false
+                }
+            }
+        }
 
         upcomingViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
@@ -62,8 +71,12 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun setEventList(upcomingEventItemList: List<EventItem>) {
-        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
+        val layoutManager = LinearLayoutManager(context)
+        binding.rvEvents.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
+        binding.rvEvents.addItemDecoration(itemDecoration)
 
+        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
         upcomingEventItemAdapter.apply {
             this.submitList(upcomingEventItemList)
             this.setOnItemClickCallback(object :

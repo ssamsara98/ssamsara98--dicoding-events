@@ -28,6 +28,10 @@ class FinishedViewModel : ViewModel() {
         fetchFinishedEventList()
     }
 
+    fun load() {
+        fetchFinishedEventList()
+    }
+
     private fun fetchFinishedEventList() {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getEventList(active = 0)
