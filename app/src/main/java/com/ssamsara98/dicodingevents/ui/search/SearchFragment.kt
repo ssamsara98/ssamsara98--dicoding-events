@@ -1,12 +1,12 @@
 package com.ssamsara98.dicodingevents.ui.search
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,22 +30,6 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        this.searchEvents()
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun searchEvents() {
-        val layoutManager = LinearLayoutManager(context)
-        binding.rvEvents.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
-        binding.rvEvents.addItemDecoration(itemDecoration)
-
         searchViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
@@ -58,15 +42,26 @@ class SearchFragment : Fragment() {
             setEventList(it)
         }
 
-        binding.svQuery.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean = true
+        with(binding.svQuery) {
+            this.isSubmitButtonEnabled = true
 
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query == null) return false
-                searchViewModel.fetchSearch(query)
-                return true
-            }
-        })
+            this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean = true
+
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (query == null) return false
+                    searchViewModel.fetchSearch(query)
+                    return true
+                }
+            })
+        }
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -74,8 +69,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun setEventList(upcomingEventItemList: List<EventItem>) {
-        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
+        val layoutManager = LinearLayoutManager(context)
+        binding.rvEvents.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
+        binding.rvEvents.addItemDecoration(itemDecoration)
 
+        val upcomingEventItemAdapter = UpcomingEventItemAdapter()
         upcomingEventItemAdapter.apply {
             this.submitList(upcomingEventItemList)
             this.setOnItemClickCallback(object :
