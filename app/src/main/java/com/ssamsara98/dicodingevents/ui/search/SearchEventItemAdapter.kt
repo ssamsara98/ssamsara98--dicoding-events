@@ -42,9 +42,11 @@ class SearchEventItemAdapter :
     class ViewHolder(private val binding: SearchEventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventItem) {
-            binding.tvEventName.text = eventItem.name
-            binding.tvEventSummary.text = eventItem.summary
-            Glide.with(binding.ivMediaCover).load(eventItem.mediaCover).into(binding.ivMediaCover)
+            binding.apply {
+                tvEventName.text = eventItem.name
+                tvEventSummary.text = eventItem.summary
+                Glide.with(ivMediaCover).load(eventItem.mediaCover).into(ivMediaCover)
+            }
         }
     }
 

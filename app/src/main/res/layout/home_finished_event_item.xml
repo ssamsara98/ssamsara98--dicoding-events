@@ -45,10 +45,7 @@
                 android:scrollHorizontally="false"
                 android:text="@string/event_item_name"
                 android:textSize="14sp"
-                android:textStyle="bold|italic"
-                app:layout_constraintBottom_toTopOf="@id/tv_event_summary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/tv_event_summary"
@@ -60,10 +57,7 @@
                 android:maxLines="3"
                 android:scrollHorizontally="false"
                 android:text="@string/event_item_summary"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_event_name" />
+                android:textSize="12sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

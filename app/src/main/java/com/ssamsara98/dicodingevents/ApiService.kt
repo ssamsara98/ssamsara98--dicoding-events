@@ -10,7 +10,7 @@ interface ApiService {
     fun getEventList(
         @Query("active") active: Int? = null,
         @Query("limit") limit: Int? = null,
-        @Query("query") query: String? = null,
+        @Query("q") query: String? = null,
     ): Call<EventsResponse>
 
     @GET("/events/{id}")

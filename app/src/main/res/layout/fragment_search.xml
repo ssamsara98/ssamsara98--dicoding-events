@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="8dp"
     tools:context=".ui.search.SearchFragment">
+    <!--    android:paddingHorizontal="8dp"-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:queryHint="Search Here..." />
+            app:queryHint="@string/searchbar_hint" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_events"

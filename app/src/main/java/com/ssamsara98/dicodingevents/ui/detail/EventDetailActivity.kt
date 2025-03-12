@@ -63,14 +63,14 @@ class EventDetailActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.layoutMain.visibility = if (isLoading) View.GONE else View.VISIBLE
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.apply {
+            layoutMain.visibility = if (isLoading) View.GONE else View.VISIBLE
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
 
     private fun setEventItem(eventItem: EventItem?) {
         if (eventItem == null) return
-
-        Glide.with(this).load(eventItem.mediaCover).into(binding.ivMediaCover)
 
         val quota = "Quota: ${eventItem.quota}"
         val registrants = "Pendaftar: ${eventItem.registrants}"
@@ -80,21 +80,24 @@ class EventDetailActivity : AppCompatActivity() {
         val owner = "Penyelenggara: ${eventItem.ownerName}"
         val location = "Lokasi: ${eventItem.cityName}"
 
-        binding.tvName.text = eventItem.name
-        binding.tvSummary.text = eventItem.summary
-        binding.tvCategory.text = eventItem.category
-        binding.tvQuota.text = quota
-        binding.tvRegistrants.text = registrants
-        binding.tvQuotaRemain.text = quotaRemain
-        binding.tvTime.text = time
-        binding.tvOwner.text = owner
-        binding.tvLocation.text = location
-        binding.tvDescription.text =
-            Html.fromHtml(eventItem.description, Html.FROM_HTML_MODE_LEGACY)
+        with(binding) {
+            Glide.with(this@EventDetailActivity).load(eventItem.mediaCover).into(ivMediaCover)
+            tvName.text = eventItem.name
+            tvSummary.text = eventItem.summary
+            tvCategory.text = eventItem.category
+            tvQuota.text = quota
+            tvRegistrants.text = registrants
+            tvQuotaRemain.text = quotaRemain
+            tvTime.text = time
+            tvOwner.text = owner
+            tvLocation.text = location
+            tvDescription.text =
+                Html.fromHtml(eventItem.description, Html.FROM_HTML_MODE_LEGACY)
 
-        binding.btnRegister.setOnClickListener {
-            val registerUrl = Intent(Intent.ACTION_VIEW, Uri.parse(eventItem.link))
-            this.startActivity(registerUrl)
+            btnRegister.setOnClickListener {
+                val registerUrl = Intent(Intent.ACTION_VIEW, Uri.parse(eventItem.link))
+                this@EventDetailActivity.startActivity(registerUrl)
+            }
         }
     }
 }

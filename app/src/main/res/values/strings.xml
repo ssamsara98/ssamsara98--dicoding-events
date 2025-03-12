@@ -19,11 +19,8 @@
     <string name="activity_event_detail_registrants">Registrants</string>
     <string name="activity_event_detail_quota_remain">Quota Remain</string>
     <string name="activity_event_detail_time">Time</string>
-    <string name="activity_event_detail_begin_time">Begin Time</string>
-    <string name="activity_event_detail_end_time">End Time</string>
     <string name="activity_event_detail_owner">Owner</string>
     <string name="activity_event_detail_location">Location</string>
-    <string name="activity_event_detail_link">Link</string>
     <string name="activity_event_detail_description">
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia similique delectus doloremque ipsa tenetur ducimus pariatur! Repudiandae distinctio dolores nesciunt?\n\n
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facilis odio voluptas debitis distinctio quam, exercitationem porro illum voluptatum aliquid aliquam nobis numquam, saepe, tempora aperiam dolor quisquam quia officiis sequi! Eum alias, maxime maiores nulla excepturi dolores vero sequi modi minus necessitatibus!\n\n

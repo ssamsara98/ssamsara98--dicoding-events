@@ -1,4 +1,4 @@
-package com.ssamsara98.dicodingevents;
+package com.ssamsara98.dicodingevents
 
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -10,10 +10,13 @@ class ApiConfig {
     companion object {
         fun getApiService(): ApiService {
             val loggingInterceptor =
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+                HttpLoggingInterceptor().setLevel(
+                    if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                    else HttpLoggingInterceptor.Level.NONE
+                )
 
             val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
-            val retrofit = Retrofit.Builder().baseUrl("https://event-api.dicoding.dev")
+            val retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(
                     GsonConverterFactory.create(
                         GsonBuilder().serializeNulls().create()

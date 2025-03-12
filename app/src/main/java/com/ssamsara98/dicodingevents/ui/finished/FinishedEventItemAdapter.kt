@@ -42,8 +42,10 @@ class FinishedEventItemAdapter :
     class ViewHolder(private val binding: FinishedEventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventItem) {
-            binding.tvEventName.text = eventItem.name
-            Glide.with(binding.ivMediaCover).load(eventItem.imageLogo).into(binding.ivMediaCover)
+            binding.apply {
+                tvEventName.text = eventItem.name
+                Glide.with(ivMediaCover).load(eventItem.imageLogo).into(ivMediaCover)
+            }
         }
     }
 
