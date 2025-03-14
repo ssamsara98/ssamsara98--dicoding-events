@@ -27,6 +27,12 @@ class EventDetailActivity : AppCompatActivity() {
         binding = ActivityEventDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.apply {
+            title = "Event Detail"
+            subtitle = "this page is showing the detail of some event"
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         val extras = intent.extras
         val args =
             if (extras != null) EventDetailActivityArgs.fromBundle(extras)
