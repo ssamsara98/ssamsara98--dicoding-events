@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentSearchBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.util.Resource
 
 class SearchFragment : Fragment() {
 
@@ -33,16 +34,23 @@ class SearchFragment : Fragment() {
             binding.root.isRefreshing = false
         }
 
-        searchViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        searchViewModel.snackBarTextFailed.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { content ->
-                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
-            }
-        }
         searchViewModel.eventList.observe(viewLifecycleOwner) {
-            setEventList(it)
+            when (it) {
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+
+                is Resource.Success -> {
+                    showLoading(false)
+                    setEventList(it.data)
+                }
+
+                is Resource.Error -> {
+                    it.error.getContentIfNotHandled()?.let { content ->
+                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         with(binding.svQuery) {
@@ -70,7 +78,7 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setEventList(eventItemList: List<EventItem>) {
+    private fun setEventList(eventItemList: List<EventItem>?) {
         val layoutManager = LinearLayoutManager(context)
         binding.rvEvents.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)

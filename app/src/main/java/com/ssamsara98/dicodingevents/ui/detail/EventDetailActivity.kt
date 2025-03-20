@@ -1,17 +1,18 @@
 package com.ssamsara98.dicodingevents.ui.detail
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.ActivityEventDetailBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,15 +56,22 @@ class EventDetailActivity : AppCompatActivity() {
             }
         }
 
-        detailEventViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
         detailEventViewModel.eventItem.observe(this) {
-            setEventItem(it)
-        }
-        detailEventViewModel.snackBarTextFailed.observe(this) {
-            it.getContentIfNotHandled()?.let { content ->
-                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+            when (it) {
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+
+                is Resource.Success -> {
+                    showLoading(false)
+                    setEventItem(it.data)
+                }
+
+                is Resource.Error -> {
+                    it.error.getContentIfNotHandled()?.let { content ->
+                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
@@ -101,7 +109,7 @@ class EventDetailActivity : AppCompatActivity() {
                 Html.fromHtml(eventItem.description, Html.FROM_HTML_MODE_LEGACY)
 
             btnRegister.setOnClickListener {
-                val registerUrl = Intent(Intent.ACTION_VIEW, Uri.parse(eventItem.link))
+                val registerUrl = Intent(Intent.ACTION_VIEW, eventItem.link.toUri())
                 this@EventDetailActivity.startActivity(registerUrl)
             }
         }

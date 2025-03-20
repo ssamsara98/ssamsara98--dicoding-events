@@ -9,20 +9,15 @@ import com.ssamsara98.dicodingevents.response.EventItem
 import com.ssamsara98.dicodingevents.response.EventsResponse
 import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingViewModel
 import com.ssamsara98.dicodingevents.util.Event
+import com.ssamsara98.dicodingevents.util.Resource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class FinishedViewModel : ViewModel() {
 
-    private val _isLoading = MutableLiveData<Boolean>().apply { value = true }
-    val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _eventListFinished = MutableLiveData<List<EventItem>>()
-    val eventListFinished: LiveData<List<EventItem>> = _eventListFinished
-
-    private val _snackBarTextFailed = MutableLiveData<Event<String>>()
-    val snackBarTextFailed: LiveData<Event<String>> = _snackBarTextFailed
+    private val _eventListFinished = MutableLiveData<Resource<List<EventItem>?, Event<String>>>()
+    val eventListFinished: LiveData<Resource<List<EventItem>?, Event<String>>> = _eventListFinished
 
     init {
         fetchFinishedEventList()
@@ -33,7 +28,7 @@ class FinishedViewModel : ViewModel() {
     }
 
     private fun fetchFinishedEventList() {
-        _isLoading.value = true
+        _eventListFinished.value = Resource.Loading
         val client = ApiConfig.getApiService().getEventList(0)
 
         val callback = object : Callback<EventsResponse> {
@@ -41,12 +36,12 @@ class FinishedViewModel : ViewModel() {
                 call: Call<EventsResponse>,
                 response: Response<EventsResponse>
             ) {
-                _isLoading.value = false
                 if (response.isSuccessful) {
                     val body = response.body()
-                    _eventListFinished.value = body?.listEvents
+                    _eventListFinished.value = Resource.Success(body?.listEvents)
                 } else {
-                    _snackBarTextFailed.value = Event("onFailure: ${response.message()}")
+                    _eventListFinished.value =
+                        Resource.Error(Event("onFailure: ${response.message()}"))
                     Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${response.message()}")
                 }
             }
@@ -55,8 +50,8 @@ class FinishedViewModel : ViewModel() {
                 call: Call<EventsResponse>,
                 t: Throwable
             ) {
-                _isLoading.value = false
-                _snackBarTextFailed.value = Event("onFailure: ${t.message.toString()}")
+                _eventListFinished.value =
+                    Resource.Error(Event("onFailure: ${t.message.toString()}"))
                 Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
             }
         }

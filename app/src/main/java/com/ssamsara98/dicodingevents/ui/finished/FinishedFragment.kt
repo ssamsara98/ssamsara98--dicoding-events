@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentFinishedBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,16 +41,23 @@ class FinishedFragment : Fragment() {
             }
         }
 
-        finishedViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        finishedViewModel.snackBarTextFailed.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { content ->
-                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+        finishedViewModel.eventListFinished.observe(/* owner = */ viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+
+                is Resource.Success -> {
+                    showLoading(false)
+                    setEventList(it.data)
+                }
+
+                is Resource.Error -> {
+                    it.error.getContentIfNotHandled()?.let { content ->
+                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
             }
-        }
-        finishedViewModel.eventListFinished.observe(viewLifecycleOwner) {
-            setEventList(it)
         }
 
         return root
@@ -64,7 +72,7 @@ class FinishedFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setEventList(finishedEventItemList: List<EventItem>) {
+    private fun setEventList(finishedEventItemList: List<EventItem>?) {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.rvEvents.layoutManager = layoutManager
 

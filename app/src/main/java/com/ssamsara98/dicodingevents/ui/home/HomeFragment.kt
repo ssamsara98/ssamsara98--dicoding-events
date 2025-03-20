@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentHomeBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,28 +42,42 @@ class HomeFragment : Fragment() {
             }
         }
 
-        homeViewModel.isLoadingUpcoming.observe(viewLifecycleOwner) {
-            showUpcomingLoading(it)
-        }
-        homeViewModel.upcomingSnackBarTextFailed.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { content ->
-                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
-            }
-        }
         homeViewModel.upcomingEventList.observe(viewLifecycleOwner) {
-            setUpcomingEventList(it)
+            when (it) {
+                is Resource.Loading -> {
+                    showUpcomingLoading(true)
+                }
+
+                is Resource.Success -> {
+                    showUpcomingLoading(false)
+                    setUpcomingEventList(it.data)
+                }
+
+                is Resource.Error -> {
+                    it.error.getContentIfNotHandled()?.let { content ->
+                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
-        homeViewModel.isLoadingFinished.observe(viewLifecycleOwner) {
-            showFinishedLoading(it)
-        }
-        homeViewModel.finishedSnackBarTextFailed.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { content ->
-                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
-            }
-        }
         homeViewModel.finishedEventList.observe(viewLifecycleOwner) {
-            setFinishedEventList(it)
+            when (it) {
+                is Resource.Loading -> {
+                    showFinishedLoading(true)
+                }
+
+                is Resource.Success -> {
+                    showFinishedLoading(false)
+                    setFinishedEventList(it.data)
+                }
+
+                is Resource.Error -> {
+                    it.error.getContentIfNotHandled()?.let { content ->
+                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         return root
@@ -77,7 +92,7 @@ class HomeFragment : Fragment() {
         binding.upcomingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setUpcomingEventList(upcomingEventList: List<EventItem>) {
+    private fun setUpcomingEventList(upcomingEventList: List<EventItem>?) {
         val upcomingLayoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvUpcomingEvents.layoutManager = upcomingLayoutManager
@@ -103,7 +118,7 @@ class HomeFragment : Fragment() {
         binding.finishedProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setFinishedEventList(finishedEventList: List<EventItem>) {
+    private fun setFinishedEventList(finishedEventList: List<EventItem>?) {
         val finishedLayoutManager = LinearLayoutManager(context)
         binding.rvFinishedEvents.layoutManager = finishedLayoutManager
         val finishedItemDecoration =

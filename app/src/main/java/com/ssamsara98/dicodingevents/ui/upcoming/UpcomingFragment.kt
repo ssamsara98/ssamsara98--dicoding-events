@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentUpcomingBinding
 import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,16 +42,23 @@ class UpcomingFragment : Fragment() {
             }
         }
 
-        upcomingViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        upcomingViewModel.snackBarTextFailed.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { content ->
-                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
-            }
-        }
         upcomingViewModel.eventList.observe(viewLifecycleOwner) {
-            setEventList(it)
+            when (it) {
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+
+                is Resource.Success -> {
+                    showLoading(false)
+                    setEventList(it.data)
+                }
+
+                is Resource.Error -> {
+                    it.error.getContentIfNotHandled()?.let { content ->
+                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         return root
@@ -65,7 +73,7 @@ class UpcomingFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setEventList(upcomingEventItemList: List<EventItem>) {
+    private fun setEventList(upcomingEventItemList: List<EventItem>?) {
         val layoutManager = LinearLayoutManager(context)
         binding.rvEvents.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)

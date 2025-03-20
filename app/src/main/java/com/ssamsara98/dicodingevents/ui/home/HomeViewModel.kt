@@ -8,29 +8,18 @@ import com.ssamsara98.dicodingevents.ApiConfig
 import com.ssamsara98.dicodingevents.response.EventItem
 import com.ssamsara98.dicodingevents.response.EventsResponse
 import com.ssamsara98.dicodingevents.util.Event
+import com.ssamsara98.dicodingevents.util.Resource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
-    private val _isLoadingUpcoming = MutableLiveData<Boolean>().apply { value = true }
-    val isLoadingUpcoming: LiveData<Boolean> = _isLoadingUpcoming
+    private val _upcomingEventList = MutableLiveData<Resource<List<EventItem>?, Event<String>>>()
+    val upcomingEventList: LiveData<Resource<List<EventItem>?, Event<String>>> = _upcomingEventList
 
-    private val _upcomingEventList = MutableLiveData<List<EventItem>>()
-    val upcomingEventList: LiveData<List<EventItem>> = _upcomingEventList
-
-    private val _upcomingSnackBarTextFailed = MutableLiveData<Event<String>>()
-    val upcomingSnackBarTextFailed: LiveData<Event<String>> = _upcomingSnackBarTextFailed
-
-    private val _isLoadingFinished = MutableLiveData<Boolean>().apply { value = true }
-    val isLoadingFinished: LiveData<Boolean> = _isLoadingFinished
-
-    private val _finishedEventList = MutableLiveData<List<EventItem>>()
-    val finishedEventList: LiveData<List<EventItem>> = _finishedEventList
-
-    private val _finishedSnackBarTextFailed = MutableLiveData<Event<String>>()
-    val finishedSnackBarTextFailed: LiveData<Event<String>> = _finishedSnackBarTextFailed
+    private val _finishedEventList = MutableLiveData<Resource<List<EventItem>?, Event<String>>>()
+    val finishedEventList: LiveData<Resource<List<EventItem>?, Event<String>>> = _finishedEventList
 
     init {
         load()
@@ -42,7 +31,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun fetchUpcomingEventList() {
-        _isLoadingUpcoming.value = true
+        _upcomingEventList.value = Resource.Loading
         val client = ApiConfig.getApiService().getEventList(1, 5)
 
         val callback = object : Callback<EventsResponse> {
@@ -50,12 +39,12 @@ class HomeViewModel : ViewModel() {
                 call: Call<EventsResponse>,
                 response: Response<EventsResponse>
             ) {
-                _isLoadingUpcoming.value = false
                 if (response.isSuccessful) {
                     val body = response.body()
-                    _upcomingEventList.value = body?.listEvents
+                    _upcomingEventList.value = Resource.Success(body?.listEvents)
                 } else {
-                    _upcomingSnackBarTextFailed.value = Event("onFailure: ${response.message()}")
+                    _upcomingEventList.value =
+                        Resource.Error(Event("onFailure: ${response.message()}"))
                     Log.e(HomeViewModel::class.simpleName, "onFailure: ${response.message()}")
                 }
             }
@@ -64,8 +53,8 @@ class HomeViewModel : ViewModel() {
                 call: Call<EventsResponse>,
                 t: Throwable
             ) {
-                _isLoadingUpcoming.value = false
-                _upcomingSnackBarTextFailed.value = Event("onFailure: ${t.message.toString()}")
+                _upcomingEventList.value =
+                    Resource.Error(Event("onFailure: ${t.message.toString()}"))
                 Log.e(HomeViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
             }
         }
@@ -73,7 +62,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun fetchFinishedEventList() {
-        _isLoadingFinished.value = true
+        _finishedEventList.value = Resource.Loading
         val client = ApiConfig.getApiService().getEventList(0, 5)
 
         val callback = object : Callback<EventsResponse> {
@@ -81,12 +70,12 @@ class HomeViewModel : ViewModel() {
                 call: Call<EventsResponse>,
                 response: Response<EventsResponse>
             ) {
-                _isLoadingFinished.value = false
                 if (response.isSuccessful) {
                     val body = response.body()
-                    _finishedEventList.value = body?.listEvents
+                    _finishedEventList.value = Resource.Success(body?.listEvents)
                 } else {
-                    _finishedSnackBarTextFailed.value = Event("onFailure: ${response.message()}")
+                    _finishedEventList.value =
+                        Resource.Error(Event("onFailure: ${response.message()}"))
                     Log.e(HomeViewModel::class.simpleName, "onFailure: ${response.message()}")
                 }
             }
@@ -95,8 +84,8 @@ class HomeViewModel : ViewModel() {
                 call: Call<EventsResponse>,
                 t: Throwable
             ) {
-                _isLoadingFinished.value = false
-                _finishedSnackBarTextFailed.value = Event("onFailure: ${t.message.toString()}")
+                _finishedEventList.value =
+                    Resource.Error(Event("onFailure: ${t.message.toString()}"))
                 Log.e(HomeViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
             }
         }
