@@ -2,12 +2,18 @@ package com.ssamsara98.dicodingevents
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssamsara98.dicodingevents.databinding.ActivityMainBinding
+import com.ssamsara98.dicodingevents.ui.setting.SettingPreferences
+import com.ssamsara98.dicodingevents.ui.setting.SettingViewModel
+import com.ssamsara98.dicodingevents.ui.setting.ViewModelFactory
+import com.ssamsara98.dicodingevents.ui.setting.dataStore
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,5 +40,16 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // dark mode
+        val pref = SettingPreferences.getInstance(application.dataStore)
+        val settingViewModel =
+            ViewModelProvider(this, ViewModelFactory(pref))[SettingViewModel::class.java]
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            AppCompatDelegate.setDefaultNightMode(
+                if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
     }
 }

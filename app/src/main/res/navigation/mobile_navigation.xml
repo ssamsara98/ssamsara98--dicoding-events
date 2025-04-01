@@ -44,6 +44,13 @@
             app:destination="@id/event_detail_activity" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.ssamsara98.dicodingevents.ui.setting.SettingFragment"
+        android:label="@string/title_setting"
+        tools:layout="@layout/fragment_setting">
+    </fragment>
+
     <activity
         android:id="@+id/event_detail_activity"
         android:name="com.ssamsara98.dicodingevents.ui.detail.EventDetailActivity"

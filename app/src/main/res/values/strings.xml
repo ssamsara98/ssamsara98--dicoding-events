@@ -1,6 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Dicoding Events</string>
 
+    <string name="dark_mode">Dark Mode</string>
     <string name="searchbar_hint">Search Here…</string>
 
     <!-- menu -->
@@ -8,6 +10,7 @@
     <string name="title_search">Search</string>
     <string name="title_upcoming">Upcoming</string>
     <string name="title_finished">Finished</string>
+    <string name="title_setting">Setting</string>
 
     <!-- activity -->
     <string name="activity_event_detail_register">Register</string>

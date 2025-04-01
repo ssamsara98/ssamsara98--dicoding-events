@@ -1,0 +1,61 @@
+package com.ssamsara98.dicodingevents.ui.setting
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.ssamsara98.dicodingevents.databinding.FragmentSettingBinding
+
+class SettingFragment : Fragment() {
+
+    private var _binding: FragmentSettingBinding? = null
+    private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSettingBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        val switchTheme = binding.switchTheme
+        // switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        //     if (isChecked) {
+        //         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        //         switchTheme.isChecked = true
+        //     } else {
+        //         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        //         switchTheme.isChecked = false
+        //     }
+        // }
+        val pref =
+            context?.applicationContext?.dataStore?.let { SettingPreferences.getInstance(it) }
+        val settingViewModel = pref?.let { ViewModelProvider(this, ViewModelFactory(it)) }?.get(
+            SettingViewModel::class.java
+        )
+        settingViewModel?.getThemeSettings()
+            ?.observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
+                if (isDarkModeActive) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    switchTheme.isChecked = true
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    switchTheme.isChecked = false
+                }
+            }
+        switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            settingViewModel?.saveThemeSetting(isChecked)
+        }
+
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+}
