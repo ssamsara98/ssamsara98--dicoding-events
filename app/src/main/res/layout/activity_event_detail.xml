@@ -41,10 +41,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="-32dp"
+                    android:contentDescription="@string/title_favorite"
                     android:src="@drawable/ic_favorite_border_black_24dp"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_media_cover"
                     app:layout_constraintEnd_toEndOf="@+id/iv_media_cover"
-                    tools:ignore="ContentDescription" />
+                    />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

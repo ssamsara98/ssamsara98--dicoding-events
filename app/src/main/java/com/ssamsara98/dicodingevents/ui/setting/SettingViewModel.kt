@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.ssamsara98.dicodingevents.data.DicodingRepository
 import kotlinx.coroutines.launch
 
-class SettingViewModel(private val repository: DicodingRepository) : ViewModel() {
+class SettingViewModel(
+    private val repository: DicodingRepository
+) : ViewModel() {
     fun getThemeSettings(): LiveData<Boolean> = repository.getThemeSetting().asLiveData()
 
     fun saveThemeSetting(isDarkModeActive: Boolean) = viewModelScope.launch {

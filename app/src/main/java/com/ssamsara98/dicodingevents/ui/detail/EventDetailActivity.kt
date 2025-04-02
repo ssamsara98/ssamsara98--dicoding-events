@@ -10,9 +10,12 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.ssamsara98.dicodingevents.R
+import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.databinding.ActivityEventDetailBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
+import com.ssamsara98.dicodingevents.util.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,7 +23,9 @@ import kotlinx.coroutines.withContext
 class EventDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventDetailBinding
 
-    private val detailEventViewModel by viewModels<EventDetailViewModel>()
+    private val eventDetailViewModel by viewModels<EventDetailViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,21 +47,21 @@ class EventDetailActivity : AppCompatActivity() {
         if (eventItem != null) {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
-                    detailEventViewModel.changeEventItem(eventItem)
+                    eventDetailViewModel.changeEventItem(eventItem)
                 }
             }
 
             binding.swipeRefresh.setOnRefreshListener {
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
-                        detailEventViewModel.fetchEvent(eventItem.id.toString())
+                        eventDetailViewModel.fetchEvent(eventItem.id.toString())
                         binding.swipeRefresh.isRefreshing = false
                     }
                 }
             }
         }
 
-        detailEventViewModel.eventItem.observe(this) {
+        eventDetailViewModel.eventItem.observe(this) {
             when (it) {
                 is Resource.Loading -> {
                     showLoading(true)
@@ -72,6 +77,14 @@ class EventDetailActivity : AppCompatActivity() {
                         Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
                     }
                 }
+            }
+        }
+
+        eventDetailViewModel.isFavorite.observe(this) {
+            if (it == true) {
+                binding.fabFavorite.setImageResource(R.drawable.ic_favorite_black_24dp)
+            } else {
+                binding.fabFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             }
         }
     }
@@ -105,12 +118,37 @@ class EventDetailActivity : AppCompatActivity() {
             tvTime.text = time
             tvOwner.text = owner
             tvLocation.text = location
-            tvDescription.text =
-                Html.fromHtml(eventItem.description, Html.FROM_HTML_MODE_LEGACY)
+            tvDescription.text = Html.fromHtml(eventItem.description, Html.FROM_HTML_MODE_LEGACY)
 
             btnRegister.setOnClickListener {
                 val registerUrl = Intent(Intent.ACTION_VIEW, eventItem.link.toUri())
                 this@EventDetailActivity.startActivity(registerUrl)
+            }
+
+            fabFavorite.setOnClickListener {
+                val favoriteEventEntity = eventItem.let {
+                    FavoriteEventEntity(
+                        it.id,
+                        it.name,
+                        it.summary,
+                        it.description,
+                        it.imageLogo,
+                        it.mediaCover,
+                        it.category,
+                        it.ownerName,
+                        it.cityName,
+                        it.quota,
+                        it.registrants,
+                        it.beginTime,
+                        it.endTime,
+                        it.link,
+                    )
+                }
+                lifecycleScope.launch(Dispatchers.Default) {
+                    withContext(Dispatchers.Main) {
+                        eventDetailViewModel.toggleBookmark(favoriteEventEntity)
+                    }
+                }
             }
         }
     }

@@ -13,8 +13,20 @@ interface ApiService {
         @Query("q") query: String? = null,
     ): Call<EventsResponse>
 
+    @GET("/events")
+    suspend fun getEventListAsync(
+        @Query("active") active: Int? = null,
+        @Query("limit") limit: Int? = null,
+        @Query("q") query: String? = null,
+    ): EventsResponse
+
     @GET("/events/{id}")
     fun getEventById(
         @Path("id") id: String
     ): Call<EventResponse>
+
+    @GET("/events/{id}")
+    suspend fun getEventByIdAsync(
+        @Path("id") id: String
+    ): EventResponse
 }
