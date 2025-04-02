@@ -8,9 +8,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ssamsara98.dicodingevents.data.datastore.SettingPreferences
 import com.ssamsara98.dicodingevents.databinding.FragmentSettingBinding
-import com.ssamsara98.dicodingevents.di.dataStore
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
 
 class SettingFragment : Fragment() {
@@ -26,10 +24,9 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val pref = activity?.let { SettingPreferences.getInstance(it.dataStore) }
-        val settingViewModel = pref?.let {
-            ViewModelProvider(this, ViewModelFactory(it))[SettingViewModel::class.java]
-        }
+        val factory = activity?.let { ViewModelFactory.getInstance(it) }
+        val settingViewModel =
+            factory?.let { ViewModelProvider(this, it)[SettingViewModel::class.java] }
         settingViewModel?.getThemeSettings()
             ?.observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
                 binding.switchTheme.isChecked = isDarkModeActive
