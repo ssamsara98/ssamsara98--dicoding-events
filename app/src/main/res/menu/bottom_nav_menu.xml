@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
 
-    <item
-        android:id="@+id/navigation_search"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/title_search" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_search"-->
+<!--        android:icon="@drawable/ic_search_black_24dp"-->
+<!--        android:title="@string/title_search" />-->
 
     <item
         android:id="@+id/navigation_upcoming"
@@ -20,6 +20,11 @@
         android:id="@+id/navigation_finished"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_finished" />
+
+    <item
+        android:id="@+id/navigation_favorite"
+        android:icon="@drawable/ic_favorite_black_24dp"
+        android:title="@string/title_favorite" />
 
     <item
         android:id="@+id/navigation_setting"
