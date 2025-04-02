@@ -10,10 +10,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssamsara98.dicodingevents.databinding.ActivityMainBinding
+import com.ssamsara98.dicodingevents.di.dataStore
 import com.ssamsara98.dicodingevents.ui.setting.SettingPreferences
 import com.ssamsara98.dicodingevents.ui.setting.SettingViewModel
 import com.ssamsara98.dicodingevents.ui.setting.ViewModelFactory
-import com.ssamsara98.dicodingevents.ui.setting.dataStore
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_search,
                 R.id.navigation_upcoming,
                 R.id.navigation_finished,
+                R.id.navigation_setting,
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

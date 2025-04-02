@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ssamsara98.dicodingevents.databinding.FragmentSettingBinding
+import com.ssamsara98.dicodingevents.di.dataStore
 
 class SettingFragment : Fragment() {
 
