@@ -14,13 +14,14 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 object Injection {
     fun provideRepository(context: Context): DicodingRepository {
         val apiService = ApiConfig.getApiService()
-        val settingDatastore = SettingDatastore.getInstance(context.dataStore)
         val database = DicodingEventsDatabase.getInstance(context)
+        val settingDatastore = SettingDatastore.getInstance(context.dataStore)
         val favoriteEventDao = database.favoriteEventDao()
+
         return DicodingRepository.getInstance(
-            apiService = apiService,
-            settingDatastore = settingDatastore,
-            favoriteEventDao = favoriteEventDao,
+            apiService,
+            settingDatastore,
+            favoriteEventDao,
         )
     }
 }

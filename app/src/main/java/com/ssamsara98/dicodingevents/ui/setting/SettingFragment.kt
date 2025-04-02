@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.ssamsara98.dicodingevents.databinding.FragmentSettingBinding
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
 
@@ -15,6 +15,10 @@ class SettingFragment : Fragment() {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
+
+    private val settingViewModel: SettingViewModel? by viewModels {
+        activity?.let { ViewModelFactory.getInstance(it) }!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,9 +28,6 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val factory = activity?.let { ViewModelFactory.getInstance(it) }
-        val settingViewModel =
-            factory?.let { ViewModelProvider(this, it)[SettingViewModel::class.java] }
         settingViewModel?.getThemeSettings()
             ?.observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
                 binding.switchTheme.isChecked = isDarkModeActive

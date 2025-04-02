@@ -8,6 +8,9 @@ import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 @Dao
 interface FavoriteEventDao {
 
-    @Query("SELECT * FROM favorite_event_entity ORDER BY begin_time DESC")
+    @Query("SELECT * FROM favorite_event ORDER BY begin_time DESC")
     fun getFavoriteEventList(): LiveData<List<FavoriteEventEntity>>
+
+    @Query("SELECT * FROM favorite_event WHERE id = :id")
+    fun getFavoriteEventById(id: String): LiveData<FavoriteEventEntity>
 }

@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorite_event_entity")
+@Entity(tableName = "favorite_event")
 class FavoriteEventEntity(
     @field:ColumnInfo
     @field:PrimaryKey
