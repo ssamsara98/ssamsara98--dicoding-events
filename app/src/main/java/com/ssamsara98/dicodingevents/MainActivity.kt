@@ -11,9 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssamsara98.dicodingevents.databinding.ActivityMainBinding
 import com.ssamsara98.dicodingevents.di.dataStore
-import com.ssamsara98.dicodingevents.ui.setting.SettingPreferences
+import com.ssamsara98.dicodingevents.data.datastore.SettingPreferences
 import com.ssamsara98.dicodingevents.ui.setting.SettingViewModel
-import com.ssamsara98.dicodingevents.ui.setting.ViewModelFactory
+import com.ssamsara98.dicodingevents.util.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentSearchBinding
-import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
 
 class SearchFragment : Fragment() {

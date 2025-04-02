@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssamsara98.dicodingevents.databinding.HomeFinishedEventItemBinding
-import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.data.response.EventItem
 
 class FinishedEventItemAdapter :
     ListAdapter<EventItem, FinishedEventItemAdapter.ViewHolder>(DIFF_CALLBACK) {

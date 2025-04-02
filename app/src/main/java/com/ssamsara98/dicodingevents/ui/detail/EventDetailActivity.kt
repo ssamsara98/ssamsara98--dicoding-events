@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.ActivityEventDetailBinding
-import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

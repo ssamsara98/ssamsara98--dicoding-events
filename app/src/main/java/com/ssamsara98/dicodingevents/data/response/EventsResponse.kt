@@ -1,4 +1,4 @@
-package com.ssamsara98.dicodingevents.response
+package com.ssamsara98.dicodingevents.data.response
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable

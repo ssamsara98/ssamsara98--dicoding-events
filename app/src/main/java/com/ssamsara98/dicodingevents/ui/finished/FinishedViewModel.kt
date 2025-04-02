@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ssamsara98.dicodingevents.ApiConfig
-import com.ssamsara98.dicodingevents.response.EventItem
-import com.ssamsara98.dicodingevents.response.EventsResponse
+import com.ssamsara98.dicodingevents.data.response.EventItem
+import com.ssamsara98.dicodingevents.data.response.EventsResponse
 import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingViewModel
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource

@@ -1,7 +1,7 @@
 package com.ssamsara98.dicodingevents
 
-import com.ssamsara98.dicodingevents.response.EventsResponse
-import com.ssamsara98.dicodingevents.response.EventResponse
+import com.ssamsara98.dicodingevents.data.response.EventsResponse
+import com.ssamsara98.dicodingevents.data.response.EventResponse
 import retrofit2.Call
 import retrofit2.http.*
 

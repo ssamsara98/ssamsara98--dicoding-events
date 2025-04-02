@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssamsara98.dicodingevents.databinding.SearchEventItemBinding
-import com.ssamsara98.dicodingevents.response.EventItem
+import com.ssamsara98.dicodingevents.data.response.EventItem
 
 class SearchEventItemAdapter :
     ListAdapter<EventItem, SearchEventItemAdapter.ViewHolder>(DIFF_CALLBACK) {

@@ -8,8 +8,10 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.ssamsara98.dicodingevents.data.datastore.SettingPreferences
 import com.ssamsara98.dicodingevents.databinding.FragmentSettingBinding
 import com.ssamsara98.dicodingevents.di.dataStore
+import com.ssamsara98.dicodingevents.util.ViewModelFactory
 
 class SettingFragment : Fragment() {
 
@@ -17,7 +19,9 @@ class SettingFragment : Fragment() {
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root

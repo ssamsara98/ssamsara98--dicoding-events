@@ -1,4 +1,4 @@
-package com.ssamsara98.dicodingevents.ui.setting
+package com.ssamsara98.dicodingevents.data.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -7,21 +7,16 @@ import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@Suppress("PrivatePropertyName")
 class SettingPreferences private constructor(private val dataStore: DataStore<Preferences>) {
 
-    private val THEME_KEY = booleanPreferencesKey("theme_setting")
+    private val themeKey = booleanPreferencesKey("theme_setting")
 
-    fun getThemeSetting(): Flow<Boolean> {
-        return dataStore.data.map { preferences ->
-            preferences[THEME_KEY] == true
-        }
+    fun getThemeSetting(): Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[themeKey] == true
     }
 
-    suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[THEME_KEY] = isDarkModeActive
-        }
+    suspend fun saveThemeSetting(isDarkModeActive: Boolean) = dataStore.edit { preferences ->
+        preferences[themeKey] = isDarkModeActive
     }
 
     companion object {
@@ -36,5 +31,4 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
             }
         }
     }
-
 }
