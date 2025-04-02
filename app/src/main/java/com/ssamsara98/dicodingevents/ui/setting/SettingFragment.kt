@@ -21,32 +21,19 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val switchTheme = binding.switchTheme
-        // switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-        //     if (isChecked) {
-        //         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        //         switchTheme.isChecked = true
-        //     } else {
-        //         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        //         switchTheme.isChecked = false
-        //     }
-        // }
-        val pref =
-            context?.applicationContext?.dataStore?.let { SettingPreferences.getInstance(it) }
-        val settingViewModel = pref?.let { ViewModelProvider(this, ViewModelFactory(it)) }?.get(
-            SettingViewModel::class.java
-        )
+        val pref = activity?.let { SettingPreferences.getInstance(it.dataStore) }
+        val settingViewModel = pref?.let {
+            ViewModelProvider(this, ViewModelFactory(it))[SettingViewModel::class.java]
+        }
         settingViewModel?.getThemeSettings()
             ?.observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
-                if (isDarkModeActive) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    switchTheme.isChecked = true
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    switchTheme.isChecked = false
-                }
+                binding.switchTheme.isChecked = isDarkModeActive
+                AppCompatDelegate.setDefaultNightMode(
+                    if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES
+                    else AppCompatDelegate.MODE_NIGHT_NO
+                )
             }
-        switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        binding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             settingViewModel?.saveThemeSetting(isChecked)
         }
 
