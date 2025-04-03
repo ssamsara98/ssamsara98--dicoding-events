@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentSearchBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchFragment : Fragment() {
 
@@ -56,12 +60,15 @@ class SearchFragment : Fragment() {
 
         with(binding.svQuery) {
             this.isSubmitButtonEnabled = true
-
             this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean = true
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (query == null) return false
-                    searchViewModel.fetchSearch(query)
+                    lifecycleScope.launch(Dispatchers.Default) {
+                        withContext(Dispatchers.Main) {
+                            searchViewModel.fetchSearch(query)
+                        }
+                    }
                     return true
                 }
             })

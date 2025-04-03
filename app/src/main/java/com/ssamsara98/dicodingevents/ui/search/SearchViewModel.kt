@@ -19,32 +19,14 @@ class SearchViewModel : ViewModel() {
     private val _eventList = MutableLiveData<Resource<List<EventItem>?, Event<String>>>()
     val eventList: LiveData<Resource<List<EventItem>?, Event<String>>> = _eventList
 
-    fun fetchSearch(q: String) {
+    suspend fun fetchSearch(q: String) {
         _eventList.value = Resource.Loading
-        val client = ApiConfig.getApiService().getEventList(-1, query = q)
-
-        val callback = object : Callback<EventsResponse> {
-            override fun onResponse(
-                call: Call<EventsResponse>,
-                response: Response<EventsResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    _eventList.value = Resource.Success(body?.listEvents)
-                } else {
-                    _eventList.value = Resource.Error(Event("onFailure: ${response.message()}"))
-                    Log.e(HomeViewModel::class.simpleName, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(
-                call: Call<EventsResponse>,
-                t: Throwable
-            ) {
-                _eventList.value = Resource.Error(Event("onFailure: ${t.message.toString()}"))
-                Log.e(HomeViewModel::class.simpleName, "onFailure: ${t.message.toString()}")
-            }
+        try {
+            val response = ApiConfig.getApiService().getEventListAsync(-1, q = q)
+            _eventList.value = Resource.Success(response.listEvents)
+        } catch (e: Exception) {
+            _eventList.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))
+            Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
         }
-        client.enqueue(callback)
     }
 }
