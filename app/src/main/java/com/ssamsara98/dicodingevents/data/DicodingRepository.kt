@@ -39,8 +39,8 @@ class DicodingRepository private constructor(
                     favoriteEventDao.getFavoriteEventList().map { Resource.Success(it) }
                 emitSource(localData)
             } catch (e: Exception) {
+                // Log.d("NewsRepository", "getHeadlineNews: ${e.message.toString()} ")
                 emit(Resource.Error(Event(e.message.toString())))
-                Log.d("NewsRepository", "getHeadlineNews: ${e.message.toString()} ")
             }
         }
 

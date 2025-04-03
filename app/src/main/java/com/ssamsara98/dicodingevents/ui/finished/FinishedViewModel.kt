@@ -35,8 +35,8 @@ class FinishedViewModel(
             val response = repository.getEventListAsync(0)
             _eventListFinished.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
+            // Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
             _eventListFinished.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))
-            Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
         }
     }
 }

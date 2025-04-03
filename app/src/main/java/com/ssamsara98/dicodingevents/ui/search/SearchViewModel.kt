@@ -23,8 +23,8 @@ class SearchViewModel(
             val response = repository.getEventListAsync(-1, q = q)
             _eventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
+            // Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
             _eventList.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))
-            Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
         }
     }
 }

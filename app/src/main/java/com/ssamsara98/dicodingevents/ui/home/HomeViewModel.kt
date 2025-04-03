@@ -39,9 +39,9 @@ class HomeViewModel(
             val response = repository.getEventListAsync(1, 5)
             _upcomingEventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
+            // Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
             _upcomingEventList.value =
                 Resource.Error(Event("onFailure: ${e.message.toString()}"))
-            Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
         }
     }
 
@@ -52,9 +52,9 @@ class HomeViewModel(
             val response = repository.getEventListAsync(0, 5)
             _finishedEventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
+            // Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
             _finishedEventList.value =
                 Resource.Error(Event("onFailure: ${e.message.toString()}"))
-            Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
         }
     }
 }

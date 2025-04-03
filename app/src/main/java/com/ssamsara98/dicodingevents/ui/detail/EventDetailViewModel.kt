@@ -36,8 +36,8 @@ class EventDetailViewModel(
             val response = repository.getEventByIdAsync(id)
             _eventItem.value = Resource.Success(response.event)
         } catch (e: Exception) {
+            // Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
             _eventItem.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))
-            Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
         }
     }
 
