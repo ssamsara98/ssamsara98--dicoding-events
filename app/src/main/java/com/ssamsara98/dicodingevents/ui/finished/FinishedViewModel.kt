@@ -6,16 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssamsara98.dicodingevents.data.DicodingRepository
-import com.ssamsara98.dicodingevents.util.ApiConfig
 import com.ssamsara98.dicodingevents.data.response.EventItem
-import com.ssamsara98.dicodingevents.data.response.EventsResponse
 import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingViewModel
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class FinishedViewModel(
     private val repository: DicodingRepository

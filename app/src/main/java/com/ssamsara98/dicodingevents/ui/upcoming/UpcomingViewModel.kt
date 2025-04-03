@@ -6,15 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssamsara98.dicodingevents.data.DicodingRepository
-import com.ssamsara98.dicodingevents.util.ApiConfig
 import com.ssamsara98.dicodingevents.data.response.EventItem
-import com.ssamsara98.dicodingevents.data.response.EventsResponse
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class UpcomingViewModel(
     private val repository: DicodingRepository
@@ -36,7 +31,7 @@ class UpcomingViewModel(
     private suspend fun fetchUpcomingEventList() {
         _eventList.value = Resource.Loading
         try {
-            val response = ApiConfig.getApiService().getEventListAsync(1)
+            val response = repository.getEventListAsync(1)
             _eventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             _eventList.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))

@@ -4,14 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import com.ssamsara98.dicodingevents.util.ApiService
 import com.ssamsara98.dicodingevents.data.datastore.SettingDatastore
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
-import com.ssamsara98.dicodingevents.data.response.EventsResponse
 import com.ssamsara98.dicodingevents.data.room.FavoriteEventDao
+import com.ssamsara98.dicodingevents.util.ApiService
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
-import retrofit2.http.Query
 
 class DicodingRepository private constructor(
     private val apiService: ApiService,
