@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorite_event")
-class FavoriteEventEntity(
+data class FavoriteEventEntity(
     @field:ColumnInfo
     @field:PrimaryKey
     val id: Int,

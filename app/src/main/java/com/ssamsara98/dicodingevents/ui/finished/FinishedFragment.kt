@@ -53,6 +53,7 @@ class FinishedFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
+                    showLoading(false)
                     it.error.getContentIfNotHandled()?.let { content ->
                         Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
                     }

@@ -6,14 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
+import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.databinding.FragmentFavoriteBinding
+import com.ssamsara98.dicodingevents.util.Resource
+import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    private val favoriteViewModel by viewModels<FavoriteViewModel>()
+    private val favoriteViewModel: FavoriteViewModel? by viewModels {
+        activity?.let { ViewModelFactory.getInstance(it) }!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,8 +34,41 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // return inflater.inflate(R.layout.fragment_favorite, container, false)
-        _binding = FragmentFavoriteBinding.inflate(inflater,container, false)
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         val root = binding.root
+
+        favoriteViewModel?.apply {
+            getFavoriteEventList().observe(viewLifecycleOwner) {
+                if (it != null) {
+                    when (it) {
+                        is Resource.Loading -> {
+                            showLoading(true)
+                        }
+
+                        is Resource.Success -> {
+                            showLoading(false)
+                            setEventList(it.data)
+                        }
+
+                        is Resource.Error -> {
+                            showLoading(false)
+                            it.error.getContentIfNotHandled()?.let { content ->
+                                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                    }
+                }
+            }
+            binding.root.setOnRefreshListener {
+                lifecycleScope.launch(Dispatchers.Default) {
+                    withContext(Dispatchers.Main) {
+                        getFavoriteEventList()
+                        binding.root.isRefreshing = false
+                    }
+                }
+            }
+        }
 
         return root
     }
@@ -30,5 +76,44 @@ class FavoriteFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun setEventList(favoriteEventEntityList: List<FavoriteEventEntity>?) {
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.rvEvents.layoutManager = layoutManager
+
+        val favoriteEventItemAdapter = FavoriteEventItemAdapter().apply {
+            this.submitList(favoriteEventEntityList)
+            this.setOnItemClickCallback(object : FavoriteEventItemAdapter.OnItemClickCallback {
+                override fun onItemClicked(view: View, data: FavoriteEventEntity) {
+                    val toEventDetailActivity =
+                        FavoriteFragmentDirections.actionNavigationFavoriteToEventDetailActivity()
+                    val eventItem = EventItem(
+                        data.id,
+                        data.name,
+                        data.summary,
+                        data.description,
+                        data.imageLogo,
+                        data.mediaCover,
+                        data.category,
+                        data.ownerName,
+                        data.cityName,
+                        data.quota,
+                        data.registrants,
+                        data.beginTime,
+                        data.endTime,
+                        data.link
+                    )
+                    toEventDetailActivity.eventItem = eventItem
+                    view.findNavController().navigate(toEventDetailActivity)
+                }
+            })
+        }
+
+        binding.rvEvents.adapter = favoriteEventItemAdapter
     }
 }

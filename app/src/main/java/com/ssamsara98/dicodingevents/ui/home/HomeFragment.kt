@@ -54,6 +54,7 @@ class HomeFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
+                    showUpcomingLoading(false)
                     it.error.getContentIfNotHandled()?.let { content ->
                         Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
                     }
@@ -73,6 +74,7 @@ class HomeFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
+                    showFinishedLoading(false)
                     it.error.getContentIfNotHandled()?.let { content ->
                         Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
                     }

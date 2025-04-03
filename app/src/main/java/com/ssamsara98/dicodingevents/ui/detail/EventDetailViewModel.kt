@@ -32,10 +32,10 @@ class EventDetailViewModel(
 
     suspend fun fetchEvent(id: String) {
         _eventItem.value = Resource.Loading
+        _isFavorite.value = repository.checkIsFavorite(id.toInt())
         try {
             val response = ApiConfig.getApiService().getEventByIdAsync(id)
             _eventItem.value = Resource.Success(response.event)
-            _isFavorite.value = response.event?.let { repository.checkIsFavorite(it.id) }
         } catch (e: Exception) {
             _eventItem.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))
             Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")

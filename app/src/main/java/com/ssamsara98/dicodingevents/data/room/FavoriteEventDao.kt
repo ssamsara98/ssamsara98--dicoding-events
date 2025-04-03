@@ -11,7 +11,7 @@ import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 interface FavoriteEventDao {
 
     @Query("SELECT * FROM favorite_event ORDER BY begin_time DESC")
-    fun getFavoriteEventList(): List<FavoriteEventEntity>
+    fun getFavoriteEventList(): LiveData<List<FavoriteEventEntity>>
 
     @Query("SELECT * FROM favorite_event WHERE id = :id")
     fun getFavoriteEventById(id: String): FavoriteEventEntity
