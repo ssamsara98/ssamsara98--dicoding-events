@@ -1,6 +1,7 @@
-package com.ssamsara98.dicodingevents
+package com.ssamsara98.dicodingevents.util
 
 import com.google.gson.GsonBuilder
+import com.ssamsara98.dicodingevents.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ssamsara98.dicodingevents.ApiConfig
 import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.data.response.EventItem
@@ -34,7 +33,7 @@ class EventDetailViewModel(
         _eventItem.value = Resource.Loading
         _isFavorite.value = repository.checkIsFavorite(id.toInt())
         try {
-            val response = ApiConfig.getApiService().getEventByIdAsync(id)
+            val response = repository.getEventByIdAsync(id)
             _eventItem.value = Resource.Success(response.event)
         } catch (e: Exception) {
             _eventItem.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))

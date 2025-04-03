@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.ssamsara98.dicodingevents.ApiConfig
+import com.ssamsara98.dicodingevents.util.ApiConfig
 import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.data.datastore.SettingDatastore
 import com.ssamsara98.dicodingevents.data.room.DicodingEventsDatabase

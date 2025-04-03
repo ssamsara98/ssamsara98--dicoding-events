@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import com.ssamsara98.dicodingevents.ApiService
+import com.ssamsara98.dicodingevents.util.ApiService
 import com.ssamsara98.dicodingevents.data.datastore.SettingDatastore
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.data.room.FavoriteEventDao
@@ -18,17 +18,9 @@ class DicodingRepository private constructor(
 ) {
 
     /* Event Detail */
-    // fun fetchEvent(id: String) = liveData<Resource<EventItem?, Event<String>>> {
-    //     emit(Resource.Loading)
-    //     try {
-    //         val eventResponse = apiService.getEventByIdAsync(id)
-    //         emit(Resource.Success(eventResponse.event))
-    //     } catch (e: Exception) {
-    //         emit(Resource.Error(Event(e.message.toString())))
-    //         Log.d("NewsRepository", "getHeadlineNews: ${e.message.toString()} ")
-    //     }
-    // }
+    suspend fun getEventByIdAsync(id: String) = apiService.getEventByIdAsync(id)
 
+    /* Favorite Event */
     suspend fun addToFavorite(favoriteEventEntity: FavoriteEventEntity) =
         favoriteEventDao.insertFavorite(favoriteEventEntity)
 
@@ -36,18 +28,18 @@ class DicodingRepository private constructor(
 
     suspend fun checkIsFavorite(id: Int) = favoriteEventDao.checkIsFavorite(id)
 
-    fun getFavoriteEventList() = liveData {
-        emit(Resource.Loading)
-        try {
-            // val localData = favoriteEventDao.getFavoriteEventList().map { Resource.Success(it) }
-            val localData: LiveData<Resource<List<FavoriteEventEntity>, Event<String>>> =
-                favoriteEventDao.getFavoriteEventList().map { Resource.Success(it) }
-            emitSource(localData)
-        } catch (e: Exception) {
-            emit(Resource.Error(Event(e.message.toString())))
-            Log.d("NewsRepository", "getHeadlineNews: ${e.message.toString()} ")
+    fun getFavoriteEventList() =
+        liveData {
+            emit(Resource.Loading)
+            try {
+                val localData: LiveData<Resource<List<FavoriteEventEntity>, Event<String>>> =
+                    favoriteEventDao.getFavoriteEventList().map { Resource.Success(it) }
+                emitSource(localData)
+            } catch (e: Exception) {
+                emit(Resource.Error(Event(e.message.toString())))
+                Log.d("NewsRepository", "getHeadlineNews: ${e.message.toString()} ")
+            }
         }
-    }
 
     /* Setting */
     fun getThemeSetting() = settingDatastore.getThemeSetting()
