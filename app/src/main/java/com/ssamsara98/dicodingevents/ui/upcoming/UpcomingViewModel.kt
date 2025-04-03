@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.util.ApiConfig
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.data.response.EventsResponse
@@ -15,7 +16,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UpcomingViewModel : ViewModel() {
+class UpcomingViewModel(
+    private val repository: DicodingRepository
+) : ViewModel() {
 
     private val _eventList = MutableLiveData<Resource<List<EventItem>?, Event<String>>>()
     val eventList: LiveData<Resource<List<EventItem>?, Event<String>>> = _eventList

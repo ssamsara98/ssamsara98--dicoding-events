@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.util.ApiConfig
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.data.response.EventsResponse
@@ -16,7 +17,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val repository: DicodingRepository
+) : ViewModel() {
 
     private val _upcomingEventList = MutableLiveData<Resource<List<EventItem>?, Event<String>>>()
     val upcomingEventList: LiveData<Resource<List<EventItem>?, Event<String>>> = _upcomingEventList
@@ -39,7 +42,7 @@ class HomeViewModel : ViewModel() {
         _upcomingEventList.value = Resource.Loading
 
         try {
-            val response = ApiConfig.getApiService().getEventListAsync(1, 5)
+            val response = repository.getEventListAsync(1, 5)
             _upcomingEventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             _upcomingEventList.value =
@@ -52,7 +55,7 @@ class HomeViewModel : ViewModel() {
     private suspend fun fetchFinishedEventList() {
         _finishedEventList.value = Resource.Loading
         try {
-            val response = ApiConfig.getApiService().getEventListAsync(0, 5)
+            val response = repository.getEventListAsync(0, 5)
             _finishedEventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             _finishedEventList.value =

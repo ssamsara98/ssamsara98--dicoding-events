@@ -38,7 +38,7 @@ class FavoriteFragment : Fragment() {
         val root = binding.root
 
         favoriteViewModel?.apply {
-            getFavoriteEventList().observe(viewLifecycleOwner) {
+            this.getFavoriteEventList().observe(viewLifecycleOwner) {
                 if (it != null) {
                     when (it) {
                         is Resource.Loading -> {
@@ -63,7 +63,7 @@ class FavoriteFragment : Fragment() {
             binding.root.setOnRefreshListener {
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
-                        getFavoriteEventList()
+                        this@apply.getFavoriteEventList()
                         binding.root.isRefreshing = false
                     }
                 }

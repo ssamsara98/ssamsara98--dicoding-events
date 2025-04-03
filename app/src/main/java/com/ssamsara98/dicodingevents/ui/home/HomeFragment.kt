@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentHomeBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
+import com.ssamsara98.dicodingevents.util.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,7 +24,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    private val homeViewModel by viewModels<HomeViewModel>()
+    private val homeViewModel: HomeViewModel? by viewModels {
+        activity?.let { ViewModelFactory.getInstance(it) }!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,50 +36,52 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.root.setOnRefreshListener {
-            lifecycleScope.launch(Dispatchers.Default) {
-                withContext(Dispatchers.Main) {
-                    homeViewModel.load()
-                    binding.root.isRefreshing = false
-                }
-            }
-        }
-
-        homeViewModel.upcomingEventList.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                    showUpcomingLoading(true)
-                }
-
-                is Resource.Success -> {
-                    showUpcomingLoading(false)
-                    setUpcomingEventList(it.data)
-                }
-
-                is Resource.Error -> {
-                    showUpcomingLoading(false)
-                    it.error.getContentIfNotHandled()?.let { content ->
-                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+        homeViewModel?.apply {
+            binding.root.setOnRefreshListener {
+                lifecycleScope.launch(Dispatchers.Default) {
+                    withContext(Dispatchers.Main) {
+                        this@apply.load()
+                        binding.root.isRefreshing = false
                     }
                 }
             }
-        }
 
-        homeViewModel.finishedEventList.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                    showFinishedLoading(true)
+            this.upcomingEventList.observe(viewLifecycleOwner) {
+                when (it) {
+                    is Resource.Loading -> {
+                        showUpcomingLoading(true)
+                    }
+
+                    is Resource.Success -> {
+                        showUpcomingLoading(false)
+                        setUpcomingEventList(it.data)
+                    }
+
+                    is Resource.Error -> {
+                        showUpcomingLoading(false)
+                        it.error.getContentIfNotHandled()?.let { content ->
+                            Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
                 }
+            }
 
-                is Resource.Success -> {
-                    showFinishedLoading(false)
-                    setFinishedEventList(it.data)
-                }
+            this.finishedEventList.observe(viewLifecycleOwner) {
+                when (it) {
+                    is Resource.Loading -> {
+                        showFinishedLoading(true)
+                    }
 
-                is Resource.Error -> {
-                    showFinishedLoading(false)
-                    it.error.getContentIfNotHandled()?.let { content ->
-                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    is Resource.Success -> {
+                        showFinishedLoading(false)
+                        setFinishedEventList(it.data)
+                    }
+
+                    is Resource.Error -> {
+                        showFinishedLoading(false)
+                        it.error.getContentIfNotHandled()?.let { content ->
+                            Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }

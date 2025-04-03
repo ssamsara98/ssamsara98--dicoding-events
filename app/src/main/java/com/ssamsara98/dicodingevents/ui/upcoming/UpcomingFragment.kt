@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.databinding.FragmentUpcomingBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
+import com.ssamsara98.dicodingevents.util.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,7 +24,9 @@ class UpcomingFragment : Fragment() {
     private var _binding: FragmentUpcomingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    private val upcomingViewModel by viewModels<UpcomingViewModel>()
+    private val upcomingViewModel: UpcomingViewModel? by viewModels {
+        activity?.let { ViewModelFactory.getInstance(it) }!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,30 +36,32 @@ class UpcomingFragment : Fragment() {
         _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.root.setOnRefreshListener {
-            lifecycleScope.launch(Dispatchers.Default) {
-                withContext(Dispatchers.Main) {
-                    upcomingViewModel.load()
-                    binding.root.isRefreshing = false
+        upcomingViewModel?.apply {
+            binding.root.setOnRefreshListener {
+                lifecycleScope.launch(Dispatchers.Default) {
+                    withContext(Dispatchers.Main) {
+                        this@apply.load()
+                        binding.root.isRefreshing = false
+                    }
                 }
             }
-        }
 
-        upcomingViewModel.eventList.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
+            this.eventList.observe(viewLifecycleOwner) {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading(true)
+                    }
 
-                is Resource.Success -> {
-                    showLoading(false)
-                    setEventList(it.data)
-                }
+                    is Resource.Success -> {
+                        showLoading(false)
+                        setEventList(it.data)
+                    }
 
-                is Resource.Error -> {
-                    showLoading(false)
-                    it.error.getContentIfNotHandled()?.let { content ->
-                        Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                    is Resource.Error -> {
+                        showLoading(false)
+                        it.error.getContentIfNotHandled()?.let { content ->
+                            Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }

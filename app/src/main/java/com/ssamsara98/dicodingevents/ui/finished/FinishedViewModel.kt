@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.util.ApiConfig
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.data.response.EventsResponse
@@ -16,7 +17,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FinishedViewModel : ViewModel() {
+class FinishedViewModel(
+    private val repository: DicodingRepository
+) : ViewModel() {
 
     private val _eventListFinished = MutableLiveData<Resource<List<EventItem>?, Event<String>>>()
     val eventListFinished: LiveData<Resource<List<EventItem>?, Event<String>>> = _eventListFinished
@@ -34,7 +37,7 @@ class FinishedViewModel : ViewModel() {
     private suspend fun fetchFinishedEventList() {
         _eventListFinished.value = Resource.Loading
         try {
-            val response = ApiConfig.getApiService().getEventListAsync(0)
+            val response = repository.getEventListAsync(0)
             _eventListFinished.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             _eventListFinished.value = Resource.Error(Event("onFailure: ${e.message.toString()}"))
