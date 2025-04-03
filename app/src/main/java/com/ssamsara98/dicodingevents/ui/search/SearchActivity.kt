@@ -1,46 +1,57 @@
 package com.ssamsara98.dicodingevents.ui.search
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.ssamsara98.dicodingevents.databinding.FragmentSearchBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
+import com.ssamsara98.dicodingevents.databinding.ActivitySearchBinding
+import com.ssamsara98.dicodingevents.ui.detail.EventDetailActivity
 import com.ssamsara98.dicodingevents.util.Resource
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchFragment : Fragment() {
+class SearchActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySearchBinding
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
+    private val searchViewModel by viewModels<SearchViewModel> { ViewModelFactory.getInstance(this) }
 
-    private val searchViewModel: SearchViewModel? by viewModels() {
-        activity?.let { ViewModelFactory.getInstance(it) }!!
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         binding.root.setOnRefreshListener {
             binding.root.isRefreshing = false
         }
 
-        searchViewModel?.apply {
-            this.eventList.observe(viewLifecycleOwner) {
+        supportActionBar?.apply {
+            title = "Search Page"
+            setDisplayHomeAsUpEnabled(true)
+        }
+
+        val args = intent.extras?.let { SearchActivityArgs.fromBundle(it) }
+
+        searchViewModel.apply {
+            lifecycleScope.launch(Dispatchers.Default) {
+                withContext(Dispatchers.Main) {
+                    args?.let { this@apply.fetchSearch(it.q) }
+                }
+            }
+
+            this.eventList.observe(this@SearchActivity) {
                 when (it) {
                     is Resource.Loading -> {
                         showLoading(true)
@@ -62,10 +73,11 @@ class SearchFragment : Fragment() {
 
             with(binding.svQuery) {
                 this.isSubmitButtonEnabled = true
+                args?.let { this.setQuery(it.q, false) }
                 this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextChange(newText: String?): Boolean = true
                     override fun onQueryTextSubmit(q: String?): Boolean {
-                        if (q == null) return false
+                        if (q == null || q == "") return false
                         lifecycleScope.launch(Dispatchers.Default) {
                             withContext(Dispatchers.Main) {
                                 this@apply.fetchSearch(q)
@@ -76,13 +88,6 @@ class SearchFragment : Fragment() {
                 })
             }
         }
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -90,9 +95,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun setEventList(eventItemList: List<EventItem>?) {
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(this)
         binding.rvEvents.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvEvents.addItemDecoration(itemDecoration)
 
         val searchEventItemAdapter = SearchEventItemAdapter()
@@ -100,10 +105,9 @@ class SearchFragment : Fragment() {
             this.submitList(eventItemList)
             this.setOnItemClickCallback(object : SearchEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
-                    val toEventDetailActivity =
-                        SearchFragmentDirections.actionNavigationSearchToEventDetailActivity()
-                    toEventDetailActivity.eventItem = data
-                    view.findNavController().navigate(toEventDetailActivity)
+                    val intent = Intent(this@SearchActivity, EventDetailActivity::class.java)
+                    intent.putExtra(EventDetailActivity.EVENT_ITEM, data)
+                    this@SearchActivity.startActivity(intent)
                 }
             })
         }

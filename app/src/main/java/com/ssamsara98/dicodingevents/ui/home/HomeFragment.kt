@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -85,6 +86,20 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        with(binding.svQuery) {
+            this.isSubmitButtonEnabled = true
+            this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean = true
+                override fun onQueryTextSubmit(q: String?): Boolean {
+                    if (q == null || q == "") return false
+                    val toSearchActivity =
+                        HomeFragmentDirections.actionNavigationHomeToSearchActivity(q)
+                    view?.findNavController()?.navigate(toSearchActivity)
+                    return true
+                }
+            })
         }
 
         return root

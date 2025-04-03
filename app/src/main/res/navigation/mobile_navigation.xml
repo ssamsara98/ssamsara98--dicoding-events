@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_navigation_home_to_eventDetailActivity"
             app:destination="@id/event_detail_activity" />
+        <action
+            android:id="@+id/action_navigation_home_to_search_activity"
+            app:destination="@id/search_activity" />
     </fragment>
 
     <fragment
@@ -58,8 +61,7 @@
         android:id="@+id/navigation_setting"
         android:name="com.ssamsara98.dicodingevents.ui.setting.SettingFragment"
         android:label="@string/title_setting"
-        tools:layout="@layout/fragment_setting">
-    </fragment>
+        tools:layout="@layout/fragment_setting" />
 
     <activity
         android:id="@+id/event_detail_activity"
@@ -72,4 +74,16 @@
             app:argType="com.ssamsara98.dicodingevents.data.response.EventItem"
             app:nullable="true" />
     </activity>
+
+    <activity
+        android:id="@+id/search_activity"
+        android:name="com.ssamsara98.dicodingevents.ui.search.SearchActivity"
+        android:label="search_activity"
+        tools:layout="@layout/activity_search">
+        <argument
+            android:name="q"
+            app:argType="string" />
+    </activity>
+
+
 </navigation>

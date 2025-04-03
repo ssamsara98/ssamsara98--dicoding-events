@@ -26,6 +26,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="HardcodedText" />
 
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/sv_query"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/search_view_bg"
+                app:iconifiedByDefault="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                app:queryHint="@string/searchbar_hint" />
+
             <TextView
                 android:id="@+id/tv_upcoming"
                 android:layout_width="match_parent"
@@ -35,7 +48,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+                app:layout_constraintTop_toBottomOf="@+id/sv_query" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_banner"

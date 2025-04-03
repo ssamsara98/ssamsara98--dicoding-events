@@ -20,7 +20,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@Suppress("DEPRECATION")
 class EventDetailActivity : AppCompatActivity() {
+    companion object {
+        const val EVENT_ITEM = "EVENT_ITEM"
+    }
+
     private lateinit var binding: ActivityEventDetailBinding
 
     private val eventDetailViewModel by viewModels<EventDetailViewModel> {
@@ -39,11 +44,9 @@ class EventDetailActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val extras = intent.extras
-        val args =
-            if (extras != null) EventDetailActivityArgs.fromBundle(extras)
-            else null
-        val eventItem = args?.eventItem
+        val args = intent.extras?.let { EventDetailActivityArgs.fromBundle(it) }
+
+        val eventItem = args?.eventItem ?: intent.extras?.getParcelable<EventItem>(EVENT_ITEM)
         if (eventItem != null) {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {

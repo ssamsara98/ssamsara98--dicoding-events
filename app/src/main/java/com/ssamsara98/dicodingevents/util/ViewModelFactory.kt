@@ -25,19 +25,15 @@ class ViewModelFactory(
             return EventDetailViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
             return FavoriteViewModel(repository) as T
-        }
-        else if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+        } else if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
             return HomeViewModel(repository) as T
-        }
-        else if (modelClass.isAssignableFrom(UpcomingViewModel::class.java)) {
+        } else if (modelClass.isAssignableFrom(UpcomingViewModel::class.java)) {
             return UpcomingViewModel(repository) as T
-        }
-        else if (modelClass.isAssignableFrom(FinishedViewModel::class.java)) {
+        } else if (modelClass.isAssignableFrom(FinishedViewModel::class.java)) {
             return FinishedViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
+            return SearchViewModel(repository) as T
         }
-        // else if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-        //     return SearchViewModel(repository) as T
-        // }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
 

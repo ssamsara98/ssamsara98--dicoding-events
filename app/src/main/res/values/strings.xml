@@ -3,7 +3,7 @@
     <string name="app_name">Dicoding Events</string>
 
     <string name="dark_mode">Dark Mode</string>
-    <string name="searchbar_hint">Search Here…</string>
+    <string name="searchbar_hint">Search Event Here…</string>
 
     <!-- menu -->
     <string name="title_home">Home</string>
