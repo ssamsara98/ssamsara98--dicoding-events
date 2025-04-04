@@ -8,11 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.databinding.FragmentFavoriteBinding
+import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingFragmentDirections
 import com.ssamsara98.dicodingevents.util.Resource
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -53,8 +55,7 @@ class FavoriteFragment : Fragment() {
                         is Resource.Error -> {
                             showLoading(false)
                             it.error.getContentIfNotHandled()?.let { content ->
-                                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT)
-                                    .show()
+                                Snackbar.make(binding.root, content, Snackbar.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -82,38 +83,42 @@ class FavoriteFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setEventList(favoriteEventEntityList: List<FavoriteEventEntity>?) {
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding.rvEvents.layoutManager = layoutManager
+    private fun favoriteEventEntityToEventItem(data: FavoriteEventEntity): EventItem = EventItem(
+        data.id,
+        data.name,
+        data.summary,
+        data.description,
+        data.imageLogo,
+        data.mediaCover,
+        data.category,
+        data.ownerName,
+        data.cityName,
+        data.quota,
+        data.registrants,
+        data.beginTime,
+        data.endTime,
+        data.link
+    )
 
-        val favoriteEventItemAdapter = FavoriteEventItemAdapter().apply {
+    private fun setEventList(favoriteEventEntityList: List<FavoriteEventEntity>?) {
+        val layoutManager = LinearLayoutManager(context)
+        binding.rvEvents.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
+        binding.rvEvents.addItemDecoration(itemDecoration)
+
+        val upcomingEventItemAdapter = FavoriteEventItemAdapter().apply {
             this.submitList(favoriteEventEntityList)
             this.setOnItemClickCallback(object : FavoriteEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: FavoriteEventEntity) {
                     val toEventDetailActivity =
-                        FavoriteFragmentDirections.actionNavigationFavoriteToEventDetailActivity()
-                    val eventItem = EventItem(
-                        data.id,
-                        data.name,
-                        data.summary,
-                        data.description,
-                        data.imageLogo,
-                        data.mediaCover,
-                        data.category,
-                        data.ownerName,
-                        data.cityName,
-                        data.quota,
-                        data.registrants,
-                        data.beginTime,
-                        data.endTime,
-                        data.link
-                    )
+                        UpcomingFragmentDirections.actionNavigationUpcomingToEventDetailActivity()
+                    val eventItem = favoriteEventEntityToEventItem(data)
                     toEventDetailActivity.eventItem = eventItem
                     view.findNavController().navigate(toEventDetailActivity)
                 }
             })
         }
 
-        binding.rvEvents.adapter = favoriteEventItemAdapter
+        binding.rvEvents.adapter = upcomingEventItemAdapter
     }
 }

@@ -8,18 +8,24 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
-import com.ssamsara98.dicodingevents.databinding.FinishedEventItemBinding
+import com.ssamsara98.dicodingevents.databinding.UpcomingEventItemBinding
 
 class FavoriteEventItemAdapter :
     ListAdapter<FavoriteEventEntity, FavoriteEventItemAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<FavoriteEventEntity>() {
-            override fun areItemsTheSame(oldItem: FavoriteEventEntity, newItem: FavoriteEventEntity): Boolean {
+            override fun areItemsTheSame(
+                oldItem: FavoriteEventEntity,
+                newItem: FavoriteEventEntity
+            ): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: FavoriteEventEntity, newItem: FavoriteEventEntity): Boolean {
+            override fun areContentsTheSame(
+                oldItem: FavoriteEventEntity,
+                newItem: FavoriteEventEntity
+            ): Boolean {
                 return oldItem == newItem
             }
         }
@@ -27,7 +33,7 @@ class FavoriteEventItemAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            FinishedEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            UpcomingEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -39,12 +45,13 @@ class FavoriteEventItemAdapter :
         }
     }
 
-    class ViewHolder(private val binding: FinishedEventItemBinding) :
+    class ViewHolder(private val binding: UpcomingEventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: FavoriteEventEntity) {
             binding.apply {
                 tvEventName.text = eventItem.name
-                Glide.with(ivMediaCover).load(eventItem.imageLogo).into(ivMediaCover)
+                tvEventSummary.text = eventItem.summary
+                Glide.with(ivMediaCover).load(eventItem.mediaCover).into(ivMediaCover)
             }
         }
     }
