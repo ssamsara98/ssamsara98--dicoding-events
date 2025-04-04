@@ -18,16 +18,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_search"
-        android:name="com.ssamsara98.dicodingevents.ui.search.SearchFragment"
-        android:label="@string/title_search"
-        tools:layout="@layout/fragment_search">
-        <action
-            android:id="@+id/action_navigation_search_to_event_detail_activity"
-            app:destination="@id/event_detail_activity" />
-    </fragment>
-
-    <fragment
         android:id="@+id/navigation_upcoming"
         android:name="com.ssamsara98.dicodingevents.ui.upcoming.UpcomingFragment"
         android:label="@string/title_upcoming"
@@ -79,6 +69,7 @@
         android:id="@+id/search_activity"
         android:name="com.ssamsara98.dicodingevents.ui.search.SearchActivity"
         android:label="search_activity"
+        app:action="@string/title_search"
         tools:layout="@layout/activity_search">
         <argument
             android:name="q"

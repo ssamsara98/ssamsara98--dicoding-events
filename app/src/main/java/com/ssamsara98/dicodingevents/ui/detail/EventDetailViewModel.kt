@@ -1,13 +1,11 @@
 package com.ssamsara98.dicodingevents.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.data.response.EventItem
-import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingViewModel
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.delay
@@ -33,7 +31,7 @@ class EventDetailViewModel(
         _eventItem.value = Resource.Loading
         _isFavorite.value = repository.checkIsFavorite(id.toInt())
         try {
-            val response = repository.getEventByIdAsync(id)
+            val response = repository.getEventById(id)
             _eventItem.value = Resource.Success(response.event)
         } catch (e: Exception) {
             // Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")

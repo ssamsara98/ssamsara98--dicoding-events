@@ -1,12 +1,10 @@
 package com.ssamsara98.dicodingevents.ui.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.data.response.EventItem
-import com.ssamsara98.dicodingevents.ui.home.HomeViewModel
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
 
@@ -20,7 +18,7 @@ class SearchViewModel(
     suspend fun fetchSearch(q: String) {
         _eventList.value = Resource.Loading
         try {
-            val response = repository.getEventListAsync(-1, q = q)
+            val response = repository.getEventList(-1, q = q)
             _eventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             // Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")

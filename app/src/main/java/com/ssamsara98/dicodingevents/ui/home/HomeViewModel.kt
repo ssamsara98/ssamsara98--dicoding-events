@@ -1,6 +1,5 @@
 package com.ssamsara98.dicodingevents.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,7 +35,7 @@ class HomeViewModel(
         _upcomingEventList.value = Resource.Loading
 
         try {
-            val response = repository.getEventListAsync(1, 5)
+            val response = repository.getEventList(1, 5)
             _upcomingEventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             // Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")
@@ -49,7 +48,7 @@ class HomeViewModel(
     private suspend fun fetchFinishedEventList() {
         _finishedEventList.value = Resource.Loading
         try {
-            val response = repository.getEventListAsync(0, 5)
+            val response = repository.getEventList(0, 5)
             _finishedEventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             // Log.e(HomeViewModel::class.simpleName, "onFailure: ${e.message.toString()}")

@@ -1,6 +1,5 @@
 package com.ssamsara98.dicodingevents.ui.upcoming
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +30,7 @@ class UpcomingViewModel(
     private suspend fun fetchUpcomingEventList() {
         _eventList.value = Resource.Loading
         try {
-            val response = repository.getEventListAsync(1)
+            val response = repository.getEventList(1)
             _eventList.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             // Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")

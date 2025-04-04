@@ -1,13 +1,11 @@
 package com.ssamsara98.dicodingevents.ui.finished
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssamsara98.dicodingevents.data.DicodingRepository
 import com.ssamsara98.dicodingevents.data.response.EventItem
-import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingViewModel
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
 import kotlinx.coroutines.launch
@@ -32,7 +30,7 @@ class FinishedViewModel(
     private suspend fun fetchFinishedEventList() {
         _eventListFinished.value = Resource.Loading
         try {
-            val response = repository.getEventListAsync(0)
+            val response = repository.getEventList(0)
             _eventListFinished.value = Resource.Success(response.listEvents)
         } catch (e: Exception) {
             // Log.e(UpcomingViewModel::class.simpleName, "onFailure: ${e.message.toString()}")

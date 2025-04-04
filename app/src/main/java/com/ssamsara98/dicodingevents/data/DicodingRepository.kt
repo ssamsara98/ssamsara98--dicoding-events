@@ -1,6 +1,5 @@
 package com.ssamsara98.dicodingevents.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -18,10 +17,10 @@ class DicodingRepository private constructor(
 ) {
 
     /* Event Detail */
-    suspend fun getEventListAsync(active: Int? = null, limit: Int? = null, q: String? = null) =
-        apiService.getEventListAsync(active = active, limit = limit, q = q)
+    suspend fun getEventList(active: Int? = null, limit: Int? = null, q: String? = null) =
+        apiService.getEventList(active = active, limit = limit, q = q)
 
-    suspend fun getEventByIdAsync(id: String) = apiService.getEventByIdAsync(id)
+    suspend fun getEventById(id: String) = apiService.getEventById(id)
 
     /* Favorite Event */
     suspend fun addToFavorite(favoriteEventEntity: FavoriteEventEntity) =
