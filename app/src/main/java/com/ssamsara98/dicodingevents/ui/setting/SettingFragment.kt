@@ -5,16 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import androidx.appcompat.app.AppCompatDelegate
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.ssamsara98.dicodingevents.databinding.FragmentSettingBinding
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
 
-class SettingFragment : Fragment() {
+class SettingFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
+
+
+    companion object {
+        // prevent switch runs twice when enabled
+        private var isDarkModeActive: Boolean = false
+        private var isDailyReminderActive: Boolean = false
+    }
 
     private val settingViewModel: SettingViewModel? by viewModels {
         activity?.let { ViewModelFactory.getInstance(it) }!!
@@ -30,16 +37,15 @@ class SettingFragment : Fragment() {
 
         settingViewModel?.apply {
             this.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
+                Companion.isDarkModeActive = isDarkModeActive
                 binding.switchTheme.isChecked = isDarkModeActive
-                AppCompatDelegate.setDefaultNightMode(
-                    if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES
-                    else AppCompatDelegate.MODE_NIGHT_NO
-                )
             }
+        }
 
-            binding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                this.saveThemeSetting(isChecked)
-            }
+        with(binding) {
+            this.switchTheme.setOnCheckedChangeListener(this@SettingFragment)
+
+            this.switchDailyReminder.setOnCheckedChangeListener(this@SettingFragment)
         }
 
         return root
@@ -50,4 +56,43 @@ class SettingFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCheckedChanged(
+        buttonView: CompoundButton?,
+        isChecked: Boolean
+    ) {
+        with(binding) {
+            when (buttonView?.id) {
+                switchTheme.id -> switchTheme(buttonView, isChecked)
+                switchDailyReminder.id -> switchDailyReminder(buttonView, isChecked)
+            }
+        }
+    }
+
+    private fun switchTheme(
+        buttonView: CompoundButton?,
+        isChecked: Boolean
+    ) {
+        if (isChecked == isDarkModeActive) return
+
+        settingViewModel?.saveThemeSetting(isChecked)
+        Toast.makeText(
+            activity,
+            "Dark Mode is ${if (isChecked) "enabled" else "disabled"}",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun switchDailyReminder(
+        buttonView: CompoundButton?,
+        isChecked: Boolean
+    ) {
+        if (isChecked == isDailyReminderActive) return
+
+        isDailyReminderActive = isChecked
+        Toast.makeText(
+            activity,
+            "Daily Reminder is ${if (isChecked) "enabled" else "disabled"}",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }
