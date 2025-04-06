@@ -10,6 +10,12 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.loopj.android.http.AsyncHttpResponseHandler
+import com.loopj.android.http.SyncHttpClient
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.ssamsara98.dicodingevents.data.response.EventsResponse
+import cz.msebera.android.httpclient.Header
 
 class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
@@ -27,11 +33,64 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
     }
 
     private fun getCurrentEvent(): Result {
-        Log.d(TAG, "getCurrentWeather: Mulai.....")
+        Log.d(TAG, "getCurrentEvent: Mulai.....")
         Looper.prepare()
-        // val client = SyncHttpClient()
+        val client = SyncHttpClient()
+        // val url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$APP_ID"
         val url = "${BuildConfig.BASE_URL}/events?active=-1&limit=1"
-        Log.d(TAG, "getCurrentWeather: $url")
+        Log.d(TAG, "getCurrentEvent: $url")
+        client.get(url, object : AsyncHttpResponseHandler() {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<Header?>?,
+                responseBody: ByteArray
+            ) {
+                val result = String(responseBody)
+                Log.d(TAG, result)
+                try {
+                    val moshi = Moshi.Builder()
+                        .addLast(KotlinJsonAdapterFactory())
+                        .build()
+
+                    val jsonAdapter = moshi.adapter(EventsResponse::class.java)
+                    val response = jsonAdapter.fromJson(result)
+
+                    response?.let {
+                        // val currentWeather = it.weatherList[0].main
+                        // val description = it.weatherList[0].description
+                        // val tempInKelvin = it.main.temperature
+                        //
+                        // val tempInCelsius = tempInKelvin - 273
+                        // val temperature: String = DecimalFormat("##.##").format(tempInCelsius)
+                        // val title = "Current Weather in $city"
+                        // val message = "$currentWeather, $description with $temperature celsius"
+
+                        // showNotification(title, message)
+
+                        val event = it.listEvents[0]
+                        showNotification(event.name, event.beginTime)
+                    }
+                    Log.d(TAG, "onSuccess: Selesai.....")
+                    resultStatus = Result.success()
+                } catch (e: Exception) {
+                    showNotification("Get Current Event Not Success", e.message)
+                    Log.d(TAG, "onSuccess: Gagal.....")
+                    resultStatus = Result.failure()
+                }
+            }
+
+            override fun onFailure(
+                statusCode: Int,
+                headers: Array<Header?>?,
+                responseBody: ByteArray?,
+                error: Throwable
+            ) {
+                Log.d(TAG, "onFailure: Gagal.....")
+                // ketika proses gagal, maka jobFinished diset dengan parameter true. Yang artinya job perlu di reschedule
+                showNotification("Get Current Event Failed", error.message)
+                resultStatus = Result.failure()
+            }
+        })
         return resultStatus as Result
     }
 

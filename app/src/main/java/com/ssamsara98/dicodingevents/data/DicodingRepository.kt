@@ -9,6 +9,7 @@ import com.ssamsara98.dicodingevents.data.room.FavoriteEventDao
 import com.ssamsara98.dicodingevents.util.ApiService
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
+import java.util.UUID
 
 class DicodingRepository private constructor(
     private val apiService: ApiService,
@@ -48,6 +49,11 @@ class DicodingRepository private constructor(
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
         settingDatastore.saveThemeSetting(isDarkModeActive)
+
+    fun getDailyReminderWorkId() = settingDatastore.getDailyReminderWorkId()
+
+    suspend fun saveDailyReminderWorkId(uuid: UUID?) =
+        settingDatastore.saveDailyReminderWorkId(uuid)
 
     companion object {
         @Volatile
