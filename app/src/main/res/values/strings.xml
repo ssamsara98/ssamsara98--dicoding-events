@@ -2,8 +2,9 @@
 <resources>
     <string name="app_name">Dicoding Events</string>
 
-    <string name="dark_mode">Dark Mode</string>
     <string name="searchbar_hint">Search Event Here…</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="daily_reminder">Daily Reminder</string>
 
     <!-- menu -->
     <string name="title_home">Home</string>
