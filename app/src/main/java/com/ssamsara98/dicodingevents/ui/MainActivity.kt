@@ -12,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssamsara98.dicodingevents.R
 import com.ssamsara98.dicodingevents.databinding.ActivityMainBinding
 import com.ssamsara98.dicodingevents.ui.setting.SettingViewModel
-import com.ssamsara98.dicodingevents.util.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -2,9 +2,8 @@ package com.ssamsara98.dicodingevents.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStoreFile
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.ssamsara98.dicodingevents.data.datastore.SettingPreferences
 import dagger.Module
 import dagger.Provides
@@ -13,11 +12,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
-    private const val DATASTORE_NAME = "settings"
+    // private const val DATASTORE_NAME = "settings"
 
     // @Provides
     // @Singleton

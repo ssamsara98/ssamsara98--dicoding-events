@@ -10,10 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.ssamsara98.dicodingevents.databinding.FragmentFinishedBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
+import com.ssamsara98.dicodingevents.databinding.FragmentFinishedBinding
 import com.ssamsara98.dicodingevents.util.Resource
-import com.ssamsara98.dicodingevents.util.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

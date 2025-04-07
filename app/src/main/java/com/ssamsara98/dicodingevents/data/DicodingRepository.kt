@@ -51,21 +51,4 @@ constructor(
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
         settingPreferences.saveThemeSetting(isDarkModeActive)
-
-    companion object {
-        @Volatile
-        private var instance: DicodingRepository? = null
-
-        fun getInstance(
-            apiService: ApiService,
-            settingPreferences: SettingPreferences,
-            favoriteEventDao: FavoriteEventDao
-        ): DicodingRepository = instance ?: synchronized(this) {
-            instance ?: DicodingRepository(
-                apiService = apiService,
-                settingPreferences = settingPreferences,
-                favoriteEventDao = favoriteEventDao
-            )
-        }.also { instance = it }
-    }
 }
