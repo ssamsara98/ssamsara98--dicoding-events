@@ -15,14 +15,17 @@ import com.ssamsara98.dicodingevents.databinding.ActivitySearchBinding
 import com.ssamsara98.dicodingevents.ui.detail.EventDetailActivity
 import com.ssamsara98.dicodingevents.util.Resource
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
-    private val searchViewModel by viewModels<SearchViewModel> { ViewModelFactory.getInstance(this) }
+    // private val searchViewModel by viewModels<SearchViewModel> { ViewModelFactory.getInstance(this) }
+    private val searchViewModel by viewModels<SearchViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -15,18 +15,21 @@ import com.ssamsara98.dicodingevents.databinding.FragmentUpcomingBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class UpcomingFragment : Fragment() {
 
     private var _binding: FragmentUpcomingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    private val upcomingViewModel: UpcomingViewModel? by viewModels {
-        activity?.let { ViewModelFactory.getInstance(it) }!!
-    }
+    // private val upcomingViewModel: UpcomingViewModel? by viewModels {
+    //     activity?.let { ViewModelFactory.getInstance(it) }!!
+    // }
+    private val upcomingViewModel: UpcomingViewModel? by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -8,9 +8,14 @@ import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
-class EventDetailViewModel(
+@HiltViewModel
+class EventDetailViewModel
+@Inject
+constructor(
     private val repository: DicodingRepository
 ) : ViewModel() {
 

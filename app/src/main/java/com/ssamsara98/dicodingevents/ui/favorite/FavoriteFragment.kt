@@ -17,18 +17,21 @@ import com.ssamsara98.dicodingevents.databinding.FragmentFavoriteBinding
 import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingFragmentDirections
 import com.ssamsara98.dicodingevents.util.Resource
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    private val favoriteViewModel: FavoriteViewModel? by viewModels {
-        activity?.let { ViewModelFactory.getInstance(it) }!!
-    }
+    // private val favoriteViewModel: FavoriteViewModel? by viewModels {
+    //     activity?.let { ViewModelFactory.getInstance(it) }!!
+    // }
+    private val favoriteViewModel: FavoriteViewModel? by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

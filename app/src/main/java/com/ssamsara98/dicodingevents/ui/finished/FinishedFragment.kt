@@ -14,18 +14,21 @@ import com.ssamsara98.dicodingevents.databinding.FragmentFinishedBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class FinishedFragment : Fragment() {
 
     private var _binding: FragmentFinishedBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    private val finishedViewModel: FinishedViewModel? by viewModels {
-        activity?.let { ViewModelFactory.getInstance(it) }!!
-    }
+    // private val finishedViewModel: FinishedViewModel? by viewModels {
+    //     activity?.let { ViewModelFactory.getInstance(it) }!!
+    // }
+    private val finishedViewModel: FinishedViewModel? by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

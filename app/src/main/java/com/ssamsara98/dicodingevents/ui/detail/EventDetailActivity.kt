@@ -16,11 +16,13 @@ import com.ssamsara98.dicodingevents.databinding.ActivityEventDetailBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.util.Resource
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Suppress("DEPRECATION")
+@AndroidEntryPoint
 class EventDetailActivity : AppCompatActivity() {
     companion object {
         const val EVENT_ITEM = "EVENT_ITEM"
@@ -28,9 +30,10 @@ class EventDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventDetailBinding
 
-    private val eventDetailViewModel by viewModels<EventDetailViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
+    // private val eventDetailViewModel by viewModels<EventDetailViewModel> {
+    //     ViewModelFactory.getInstance(this)
+    // }
+    private val eventDetailViewModel by viewModels<EventDetailViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
