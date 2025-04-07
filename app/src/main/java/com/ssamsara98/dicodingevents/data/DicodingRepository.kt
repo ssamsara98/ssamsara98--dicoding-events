@@ -9,8 +9,11 @@ import com.ssamsara98.dicodingevents.data.room.FavoriteEventDao
 import com.ssamsara98.dicodingevents.util.ApiService
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
+import javax.inject.Inject
 
-class DicodingRepository private constructor(
+class DicodingRepository
+@Inject
+constructor(
     private val apiService: ApiService,
     private val settingPreferences: SettingPreferences,
     private val favoriteEventDao: FavoriteEventDao

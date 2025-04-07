@@ -10,15 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.ssamsara98.dicodingevents.databinding.FragmentSettingBinding
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingFragment : Fragment() {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    private val settingViewModel: SettingViewModel? by viewModels {
-        activity?.let { ViewModelFactory.getInstance(it) }!!
-    }
+    // private val settingViewModel: SettingViewModel? by viewModels {
+    //     activity?.let { ViewModelFactory.getInstance(it) }!!
+    // }
+    private val settingViewModel: SettingViewModel? by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

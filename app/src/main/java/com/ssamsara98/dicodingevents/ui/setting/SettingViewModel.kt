@@ -5,9 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.ssamsara98.dicodingevents.data.DicodingRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SettingViewModel(
+@HiltViewModel
+class SettingViewModel
+@Inject
+constructor(
     private val repository: DicodingRepository
 ) : ViewModel() {
     fun getThemeSettings(): LiveData<Boolean> = repository.getThemeSetting().asLiveData()

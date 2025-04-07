@@ -13,12 +13,15 @@ import com.ssamsara98.dicodingevents.R
 import com.ssamsara98.dicodingevents.databinding.ActivityMainBinding
 import com.ssamsara98.dicodingevents.ui.setting.SettingViewModel
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val settingViewModel by viewModels<SettingViewModel> { ViewModelFactory.Companion.getInstance(this) }
+    // private val settingViewModel by viewModels<SettingViewModel> { ViewModelFactory.getInstance(this) }
+    private val settingViewModel by viewModels<SettingViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
