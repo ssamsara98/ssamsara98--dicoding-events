@@ -23,7 +23,6 @@ import kotlinx.coroutines.withContext
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
-    // private val searchViewModel by viewModels<SearchViewModel> { ViewModelFactory.getInstance(this) }
     private val searchViewModel by viewModels<SearchViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

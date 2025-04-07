@@ -25,9 +25,6 @@ class UpcomingFragment : Fragment() {
     private var _binding: FragmentUpcomingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    // private val upcomingViewModel: UpcomingViewModel? by viewModels {
-    //     activity?.let { ViewModelFactory.getInstance(it) }!!
-    // }
     private val upcomingViewModel: UpcomingViewModel? by viewModels()
 
     override fun onCreateView(

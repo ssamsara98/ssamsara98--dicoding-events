@@ -77,6 +77,13 @@ dependencies {
     // DI
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    // work
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.android.async.http)
+
+    implementation(libs.moshi.kotlin)
+    ksp(libs.moshi.kotlin.codegen)
 }
 
 // Allow references to generated code

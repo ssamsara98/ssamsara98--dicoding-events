@@ -14,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.data.response.EventItem
 import com.ssamsara98.dicodingevents.databinding.FragmentFavoriteBinding
-import com.ssamsara98.dicodingevents.ui.upcoming.UpcomingFragmentDirections
 import com.ssamsara98.dicodingevents.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -27,9 +26,6 @@ class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    // private val favoriteViewModel: FavoriteViewModel? by viewModels {
-    //     activity?.let { ViewModelFactory.getInstance(it) }!!
-    // }
     private val favoriteViewModel: FavoriteViewModel? by viewModels()
 
     override fun onCreateView(
@@ -108,12 +104,12 @@ class FavoriteFragment : Fragment() {
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
         binding.rvEvents.addItemDecoration(itemDecoration)
 
-        val upcomingEventItemAdapter = FavoriteEventItemAdapter().apply {
+        val favoriteEventItemAdapter = FavoriteEventItemAdapter().apply {
             this.submitList(favoriteEventEntityList)
             this.setOnItemClickCallback(object : FavoriteEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: FavoriteEventEntity) {
                     val toEventDetailActivity =
-                        UpcomingFragmentDirections.actionNavigationUpcomingToEventDetailActivity()
+                        FavoriteFragmentDirections.actionNavigationFavoriteToEventDetailActivity()
                     val eventItem = favoriteEventEntityToEventItem(data)
                     toEventDetailActivity.eventItem = eventItem
                     view.findNavController().navigate(toEventDetailActivity)
@@ -121,6 +117,6 @@ class FavoriteFragment : Fragment() {
             })
         }
 
-        binding.rvEvents.adapter = upcomingEventItemAdapter
+        binding.rvEvents.adapter = favoriteEventItemAdapter
     }
 }

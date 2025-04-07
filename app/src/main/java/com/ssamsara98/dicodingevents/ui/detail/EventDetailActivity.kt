@@ -29,9 +29,6 @@ class EventDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventDetailBinding
 
-    // private val eventDetailViewModel by viewModels<EventDetailViewModel> {
-    //     ViewModelFactory.getInstance(this)
-    // }
     private val eventDetailViewModel by viewModels<EventDetailViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,6 +99,24 @@ class EventDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun eventItemToFavoriteEventEntity(data: EventItem): FavoriteEventEntity =
+        FavoriteEventEntity(
+            data.id,
+            data.name,
+            data.summary,
+            data.description,
+            data.imageLogo,
+            data.mediaCover,
+            data.category,
+            data.ownerName,
+            data.cityName,
+            data.quota,
+            data.registrants,
+            data.beginTime,
+            data.endTime,
+            data.link
+        )
+
     private fun setEventItem(eventItem: EventItem?) {
         if (eventItem == null) return
 
@@ -132,24 +147,7 @@ class EventDetailActivity : AppCompatActivity() {
             }
 
             fabFavorite.setOnClickListener {
-                val favoriteEventEntity = eventItem.let {
-                    FavoriteEventEntity(
-                        it.id,
-                        it.name,
-                        it.summary,
-                        it.description,
-                        it.imageLogo,
-                        it.mediaCover,
-                        it.category,
-                        it.ownerName,
-                        it.cityName,
-                        it.quota,
-                        it.registrants,
-                        it.beginTime,
-                        it.endTime,
-                        it.link,
-                    )
-                }
+                val favoriteEventEntity = eventItemToFavoriteEventEntity(eventItem)
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
                         eventDetailViewModel.toggleBookmark(favoriteEventEntity)

@@ -17,20 +17,15 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDicodingEventsDatabase(
-        @ApplicationContext context: Context
-    ): DicodingEventsDatabase {
-        return Room.databaseBuilder(
+    fun provideDicodingEventsDatabase(@ApplicationContext context: Context): DicodingEventsDatabase =
+        Room.databaseBuilder(
             context,
             DicodingEventsDatabase::class.java,
             "DicodingEvents.db"
         ).build()
-    }
 
     @Provides
-    fun provideFavoriteEventDao(
-        database: DicodingEventsDatabase
-    ): FavoriteEventDao {
-        return database.favoriteEventDao()
-    }
+    fun provideFavoriteEventDao(database: DicodingEventsDatabase): FavoriteEventDao =
+        database.favoriteEventDao()
+
 }

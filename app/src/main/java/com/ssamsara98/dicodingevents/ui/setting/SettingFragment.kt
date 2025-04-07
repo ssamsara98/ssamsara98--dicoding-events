@@ -16,9 +16,6 @@ class SettingFragment : Fragment() {
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    // private val settingViewModel: SettingViewModel? by viewModels {
-    //     activity?.let { ViewModelFactory.getInstance(it) }!!
-    // }
     private val settingViewModel: SettingViewModel? by viewModels()
 
     override fun onCreateView(

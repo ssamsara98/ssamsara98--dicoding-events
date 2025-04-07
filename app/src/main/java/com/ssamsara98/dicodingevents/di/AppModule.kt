@@ -20,7 +20,6 @@ object AppModule {
         apiService: ApiService,
         settingPreferences: SettingPreferences,
         favoriteEventDao: FavoriteEventDao
-    ): DicodingRepository {
-        return DicodingRepository(apiService, settingPreferences, favoriteEventDao)
-    }
+    ): DicodingRepository = DicodingRepository(apiService, settingPreferences, favoriteEventDao)
+
 }

@@ -30,6 +30,8 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/activity_event_detail_image"
+                    android:minWidth="400dp"
+                    android:minHeight="200dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -44,8 +46,7 @@
                     android:contentDescription="@string/title_favorite"
                     android:src="@drawable/ic_favorite_border_black_24dp"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_media_cover"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_media_cover"
-                    />
+                    app:layout_constraintEnd_toEndOf="@+id/iv_media_cover" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

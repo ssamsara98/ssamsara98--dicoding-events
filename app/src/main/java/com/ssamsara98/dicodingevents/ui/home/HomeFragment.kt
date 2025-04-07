@@ -26,9 +26,6 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    // private val homeViewModel: HomeViewModel? by viewModels {
-    //     activity?.let { ViewModelFactory.getInstance(it) }!!
-    // }
     private val homeViewModel: HomeViewModel? by viewModels()
 
     override fun onCreateView(

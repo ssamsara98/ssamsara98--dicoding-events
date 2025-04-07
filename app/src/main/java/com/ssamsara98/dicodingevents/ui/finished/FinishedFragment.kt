@@ -24,9 +24,6 @@ class FinishedFragment : Fragment() {
     private var _binding: FragmentFinishedBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
-    // private val finishedViewModel: FinishedViewModel? by viewModels {
-    //     activity?.let { ViewModelFactory.getInstance(it) }!!
-    // }
     private val finishedViewModel: FinishedViewModel? by viewModels()
 
     override fun onCreateView(
