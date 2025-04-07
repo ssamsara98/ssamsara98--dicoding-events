@@ -150,7 +150,10 @@ class EventDetailActivity : AppCompatActivity() {
                 val favoriteEventEntity = eventItemToFavoriteEventEntity(eventItem)
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
-                        eventDetailViewModel.toggleBookmark(favoriteEventEntity)
+                        eventDetailViewModel.toggleBookmark(
+                            favoriteEventEntity,
+                            this@EventDetailActivity
+                        )
                     }
                 }
             }

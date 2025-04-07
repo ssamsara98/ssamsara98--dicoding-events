@@ -9,6 +9,7 @@ import com.ssamsara98.dicodingevents.data.room.FavoriteEventDao
 import com.ssamsara98.dicodingevents.util.ApiService
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
+import java.util.UUID
 import javax.inject.Inject
 
 class DicodingRepository
@@ -51,4 +52,9 @@ constructor(
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
         settingPreferences.saveThemeSetting(isDarkModeActive)
+
+    fun getDailyReminderWorkId() = settingPreferences.getDailyReminderWorkId()
+
+    suspend fun saveDailyReminderWorkId(uuid: UUID?) =
+        settingPreferences.saveDailyReminderWorkId(uuid)
 }

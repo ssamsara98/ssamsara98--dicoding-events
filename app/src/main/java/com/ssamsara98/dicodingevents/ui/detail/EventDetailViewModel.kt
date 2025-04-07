@@ -1,5 +1,7 @@
 package com.ssamsara98.dicodingevents.ui.detail
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,13 +46,23 @@ constructor(
         }
     }
 
-    suspend fun toggleBookmark(favoriteEventEntity: FavoriteEventEntity) {
+    private fun toggleBookmarkToast(isTrue: Boolean, context: Context?) {
+        Toast.makeText(
+            context,
+            "${if (isTrue) "Added to" else "Removed from"} Favorite",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    suspend fun toggleBookmark(favoriteEventEntity: FavoriteEventEntity, context: Context?) {
         if (_isFavorite.value == true) {
             repository.deleteFromFavorite(favoriteEventEntity.id)
             _isFavorite.value = false
+            toggleBookmarkToast(false, context)
         } else {
             repository.addToFavorite(favoriteEventEntity)
             _isFavorite.value = true
+            toggleBookmarkToast(true, context)
         }
     }
 }
