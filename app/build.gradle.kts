@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.devtools.ksp)
-    id("kotlin-parcelize")
     id("androidx.navigation.safeargs")
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -71,4 +72,9 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

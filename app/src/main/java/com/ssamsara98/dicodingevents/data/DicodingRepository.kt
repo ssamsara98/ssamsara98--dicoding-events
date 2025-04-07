@@ -3,7 +3,7 @@ package com.ssamsara98.dicodingevents.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import com.ssamsara98.dicodingevents.data.datastore.SettingDatastore
+import com.ssamsara98.dicodingevents.data.datastore.SettingPreferences
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
 import com.ssamsara98.dicodingevents.data.room.FavoriteEventDao
 import com.ssamsara98.dicodingevents.util.ApiService
@@ -12,7 +12,7 @@ import com.ssamsara98.dicodingevents.util.Resource
 
 class DicodingRepository private constructor(
     private val apiService: ApiService,
-    private val settingDatastore: SettingDatastore,
+    private val settingPreferences: SettingPreferences,
     private val favoriteEventDao: FavoriteEventDao
 ) {
 
@@ -44,10 +44,10 @@ class DicodingRepository private constructor(
         }
 
     /* Setting */
-    fun getThemeSetting() = settingDatastore.getThemeSetting()
+    fun getThemeSetting() = settingPreferences.getThemeSetting()
 
     suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
-        settingDatastore.saveThemeSetting(isDarkModeActive)
+        settingPreferences.saveThemeSetting(isDarkModeActive)
 
     companion object {
         @Volatile
@@ -55,12 +55,12 @@ class DicodingRepository private constructor(
 
         fun getInstance(
             apiService: ApiService,
-            settingDatastore: SettingDatastore,
+            settingPreferences: SettingPreferences,
             favoriteEventDao: FavoriteEventDao
         ): DicodingRepository = instance ?: synchronized(this) {
             instance ?: DicodingRepository(
                 apiService = apiService,
-                settingDatastore = settingDatastore,
+                settingPreferences = settingPreferences,
                 favoriteEventDao = favoriteEventDao
             )
         }.also { instance = it }

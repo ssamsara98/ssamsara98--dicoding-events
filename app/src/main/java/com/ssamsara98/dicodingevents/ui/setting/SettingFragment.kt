@@ -31,10 +31,6 @@ class SettingFragment : Fragment() {
         settingViewModel?.apply {
             this.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
                 binding.switchTheme.isChecked = isDarkModeActive
-                AppCompatDelegate.setDefaultNightMode(
-                    if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES
-                    else AppCompatDelegate.MODE_NIGHT_NO
-                )
             }
 
             binding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->

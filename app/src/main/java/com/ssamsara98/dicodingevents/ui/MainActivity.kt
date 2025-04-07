@@ -1,4 +1,4 @@
-package com.ssamsara98.dicodingevents
+package com.ssamsara98.dicodingevents.ui
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.ssamsara98.dicodingevents.R
 import com.ssamsara98.dicodingevents.databinding.ActivityMainBinding
 import com.ssamsara98.dicodingevents.ui.setting.SettingViewModel
 import com.ssamsara98.dicodingevents.util.ViewModelFactory
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val settingViewModel by viewModels<SettingViewModel> { ViewModelFactory.getInstance(this) }
+    private val settingViewModel by viewModels<SettingViewModel> { ViewModelFactory.Companion.getInstance(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

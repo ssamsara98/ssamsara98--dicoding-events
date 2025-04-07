@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.ssamsara98.dicodingevents.util.ApiConfig
 import com.ssamsara98.dicodingevents.data.DicodingRepository
-import com.ssamsara98.dicodingevents.data.datastore.SettingDatastore
+import com.ssamsara98.dicodingevents.data.datastore.SettingPreferences
 import com.ssamsara98.dicodingevents.data.room.DicodingEventsDatabase
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -15,12 +15,12 @@ object Injection {
     fun provideRepository(context: Context): DicodingRepository {
         val apiService = ApiConfig.getApiService()
         val database = DicodingEventsDatabase.getInstance(context)
-        val settingDatastore = SettingDatastore.getInstance(context.dataStore)
+        val settingPreferences = SettingPreferences.getInstance(context.dataStore)
         val favoriteEventDao = database.favoriteEventDao()
 
         return DicodingRepository.getInstance(
             apiService,
-            settingDatastore,
+            settingPreferences,
             favoriteEventDao,
         )
     }
