@@ -21,10 +21,6 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class SettingFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
-    companion object {
-        private const val DAILY_REMINDER: String = "daily_reminder"
-    }
-
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!! // This property is only valid between onCreateView and onDestroyView.
 
@@ -114,7 +110,7 @@ class SettingFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 .setConstraints(constraints)
                 .build()
         workManager.enqueueUniquePeriodicWork(
-            DAILY_REMINDER,
+            DailyReminderWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             periodicWorkRequest
         )
@@ -123,9 +119,9 @@ class SettingFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     private fun cancelPeriodicTask() {
         Toast.makeText(
             activity,
-            "cancelling periodic task \"$DAILY_REMINDER\"",
+            "cancelling periodic task \"${DailyReminderWorker.WORK_NAME}\"",
             Toast.LENGTH_SHORT
         ).show()
-        workManager.cancelUniqueWork(DAILY_REMINDER)
+        workManager.cancelUniqueWork(DailyReminderWorker.WORK_NAME)
     }
 }

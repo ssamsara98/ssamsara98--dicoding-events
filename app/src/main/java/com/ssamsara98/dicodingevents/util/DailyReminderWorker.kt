@@ -4,82 +4,39 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.os.Looper
 import androidx.core.app.NotificationCompat
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.loopj.android.http.AsyncHttpResponseHandler
-import com.loopj.android.http.SyncHttpClient
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.ssamsara98.dicodingevents.BuildConfig
 import com.ssamsara98.dicodingevents.R
-import com.ssamsara98.dicodingevents.data.response.EventsResponse
-import cz.msebera.android.httpclient.Header
 
 class DailyReminderWorker(context: Context, workerParams: WorkerParameters) :
-    Worker(context, workerParams) {
+    CoroutineWorker(context, workerParams) {
 
     companion object {
         // private val TAG = DailyReminderWorker::class.java.simpleName
-        const val NOTIFICATION_ID = 1
+        const val WORK_NAME = "daily_reminder"
         const val CHANNEL_ID = "channel_daily_reminder"
         const val CHANNEL_NAME = "Dicoding Events Daily Reminder"
+        const val NOTIFICATION_ID = 1
     }
 
     private var resultStatus: Result? = null
 
-    override fun doWork(): Result {
-        return getCurrentEvent()
-    }
+    override suspend fun doWork(): Result {
+        val api = ApiConfig.getApiService()
 
-    private fun getCurrentEvent(): Result {
-        // Log.d(TAG, "getCurrentEvent: Mulai.....")
-        Looper.prepare()
-        val client = SyncHttpClient()
-        val url = "${BuildConfig.BASE_URL}/events?active=-1&limit=1"
-        // Log.d(TAG, "getCurrentEvent: $url")
-        client.get(url, object : AsyncHttpResponseHandler() {
-            override fun onSuccess(
-                statusCode: Int,
-                headers: Array<Header?>?,
-                responseBody: ByteArray
-            ) {
-                val result = String(responseBody)
-                // Log.d(TAG, result)
-                try {
-                    val moshi = Moshi.Builder()
-                        .addLast(KotlinJsonAdapterFactory())
-                        .build()
-
-                    val jsonAdapter = moshi.adapter(EventsResponse::class.java)
-                    val response = jsonAdapter.fromJson(result)
-
-                    response?.let {
-                        val event = it.listEvents[0]
-                        showNotification(event.name, event.beginTime)
-                    }
-                    // Log.d(TAG, "onSuccess: Selesai.....")
-                    resultStatus = Result.success()
-                } catch (e: Exception) {
-                    showNotification("Get Current Event Not Success", e.message)
-                    // Log.d(TAG, "onSuccess: Gagal.....")
-                    resultStatus = Result.failure()
-                }
+        try {
+            val response = api.getEventList(-1, 1)
+            resultStatus = response.let {
+                val event = it.listEvents[0]
+                showNotification(event.name, event.beginTime)
+                Result.success()
             }
+        } catch (e: Exception) {
+            showNotification("Get Current Event Failed", e.message.toString())
+            resultStatus = Result.failure()
+        }
 
-            override fun onFailure(
-                statusCode: Int,
-                headers: Array<Header?>?,
-                responseBody: ByteArray?,
-                error: Throwable
-            ) {
-                // Log.d(TAG, "onFailure: Gagal.....")
-                // ketika proses gagal, maka jobFinished diset dengan parameter true. Yang artinya job perlu di reschedule
-                showNotification("Get Current Event Failed", error.message)
-                resultStatus = Result.failure()
-            }
-        })
         return resultStatus as Result
     }
 
