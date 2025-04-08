@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssamsara98.dicodingevents.data.entity.FavoriteEventEntity
-import com.ssamsara98.dicodingevents.databinding.UpcomingEventItemBinding
+import com.ssamsara98.dicodingevents.databinding.EventItemBinding
 
 class FavoriteEventItemAdapter :
     ListAdapter<FavoriteEventEntity, FavoriteEventItemAdapter.ViewHolder>(DIFF_CALLBACK) {
@@ -33,7 +33,7 @@ class FavoriteEventItemAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            UpcomingEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            EventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -45,13 +45,13 @@ class FavoriteEventItemAdapter :
         }
     }
 
-    class ViewHolder(private val binding: UpcomingEventItemBinding) :
+    class ViewHolder(private val binding: EventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: FavoriteEventEntity) {
             binding.apply {
                 tvEventName.text = eventItem.name
                 tvEventSummary.text = eventItem.summary
-                Glide.with(ivMediaCover).load(eventItem.mediaCover).into(ivMediaCover)
+                Glide.with(ivPicture).load(eventItem.mediaCover).into(ivPicture)
             }
         }
     }

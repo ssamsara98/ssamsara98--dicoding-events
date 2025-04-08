@@ -13,7 +13,7 @@
         android:padding="4dp">
 
         <ImageView
-            android:id="@+id/iv_media_cover"
+            android:id="@+id/iv_picture"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -33,7 +33,7 @@
             android:textSize="12sp"
             android:textStyle="bold|italic"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_media_cover" />
+            app:layout_constraintTop_toBottomOf="@id/iv_picture" />
 
         <TextView
             android:id="@+id/tv_event_summary"

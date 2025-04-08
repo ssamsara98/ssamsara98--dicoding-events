@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ssamsara98.dicodingevents.databinding.HomeFinishedEventItemBinding
+import com.ssamsara98.dicodingevents.databinding.EventItemBarBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 
 class FinishedEventItemAdapter :
@@ -27,7 +27,7 @@ class FinishedEventItemAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            HomeFinishedEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            EventItemBarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -39,7 +39,7 @@ class FinishedEventItemAdapter :
         }
     }
 
-    class ViewHolder(private val binding: HomeFinishedEventItemBinding) :
+    class ViewHolder(private val binding: EventItemBarBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventItem) {
             binding.apply {

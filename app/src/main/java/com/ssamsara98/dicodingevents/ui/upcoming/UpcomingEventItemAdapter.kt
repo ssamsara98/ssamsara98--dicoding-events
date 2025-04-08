@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ssamsara98.dicodingevents.databinding.UpcomingEventItemBinding
+import com.ssamsara98.dicodingevents.databinding.EventItemBinding
 import com.ssamsara98.dicodingevents.data.response.EventItem
 
 class UpcomingEventItemAdapter :
@@ -27,7 +27,7 @@ class UpcomingEventItemAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            UpcomingEventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            EventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -39,13 +39,13 @@ class UpcomingEventItemAdapter :
         }
     }
 
-    class ViewHolder(private val binding: UpcomingEventItemBinding) :
+    class ViewHolder(private val binding: EventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(eventItem: EventItem) {
             binding.apply {
                 tvEventName.text = eventItem.name
                 tvEventSummary.text = eventItem.summary
-                Glide.with(ivMediaCover).load(eventItem.mediaCover).into(binding.ivMediaCover)
+                Glide.with(ivPicture).load(eventItem.mediaCover).into(binding.ivPicture)
             }
         }
     }

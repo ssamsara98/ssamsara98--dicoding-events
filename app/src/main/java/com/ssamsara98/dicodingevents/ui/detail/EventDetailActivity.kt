@@ -132,7 +132,7 @@ class EventDetailActivity : AppCompatActivity() {
         val location = getString(R.string.event_detail_location, eventItem.cityName)
 
         with(binding) {
-            Glide.with(this@EventDetailActivity).load(eventItem.mediaCover).into(ivMediaCover)
+            Glide.with(this@EventDetailActivity).load(eventItem.mediaCover).into(ivPicture)
             tvName.text = eventItem.name
             tvSummary.text = eventItem.summary
             tvCategory.text = eventItem.category
