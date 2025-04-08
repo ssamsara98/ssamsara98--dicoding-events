@@ -13,9 +13,6 @@ interface FavoriteEventDao {
     @Query("SELECT * FROM favorite_event ORDER BY begin_time DESC")
     fun getFavoriteEventList(): LiveData<List<FavoriteEventEntity>>
 
-    @Query("SELECT * FROM favorite_event WHERE id = :id")
-    fun getFavoriteEventById(id: String): FavoriteEventEntity
-
     @Query("SELECT EXISTS(SELECT id FROM favorite_event WHERE id = :id)")
     suspend fun checkIsFavorite(id: Int): Boolean
 

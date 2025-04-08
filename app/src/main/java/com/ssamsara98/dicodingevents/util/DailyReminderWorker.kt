@@ -17,13 +17,14 @@ import com.ssamsara98.dicodingevents.R
 import com.ssamsara98.dicodingevents.data.response.EventsResponse
 import cz.msebera.android.httpclient.Header
 
-class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class DailyReminderWorker(context: Context, workerParams: WorkerParameters) :
+    Worker(context, workerParams) {
 
     companion object {
-        // private val TAG = MyWorker::class.java.simpleName
+        // private val TAG = DailyReminderWorker::class.java.simpleName
         const val NOTIFICATION_ID = 1
-        const val CHANNEL_ID = "channel_01"
-        const val CHANNEL_NAME = "dicoding channel"
+        const val CHANNEL_ID = "channel_daily_reminder"
+        const val CHANNEL_NAME = "Dicoding Events Daily Reminder"
     }
 
     private var resultStatus: Result? = null
@@ -85,18 +86,17 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
     private fun showNotification(title: String, description: String?) {
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notification: NotificationCompat.Builder =
-            NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(title)
-                .setContentText(description)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
+        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(title)
+            .setContentText(description)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel =
                 NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
-            notification.setChannelId(CHANNEL_ID)
             notificationManager.createNotificationChannel(channel)
+            notification.setChannelId(CHANNEL_ID)
         }
         notificationManager.notify(NOTIFICATION_ID, notification.build())
     }

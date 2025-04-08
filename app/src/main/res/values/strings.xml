@@ -6,6 +6,14 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="daily_reminder">Daily Reminder</string>
 
+    <!-- event details -->
+    <string name="event_detail_quota">Quota: %1$d</string>
+    <string name="event_detail_registrants">Pendaftar: %1$d</string>
+    <string name="event_detail_quota_remain">Sisa Kuota: %1$d</string>
+    <string name="event_detail_time">%1$s - %2$s</string>
+    <string name="event_detail_owner">Penyelenggara: %1$s</string>
+    <string name="event_detail_location">Lokasi: %1$s</string>
+
     <!-- menu -->
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>

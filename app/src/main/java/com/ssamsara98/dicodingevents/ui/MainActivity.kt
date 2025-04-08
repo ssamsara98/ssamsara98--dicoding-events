@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         // dark mode
-        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+        settingViewModel.getDarkMode().observe(this) { isEnabled ->
             AppCompatDelegate.setDefaultNightMode(
-                if (isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES
+                if (isEnabled) AppCompatDelegate.MODE_NIGHT_YES
                 else AppCompatDelegate.MODE_NIGHT_NO
             )
         }

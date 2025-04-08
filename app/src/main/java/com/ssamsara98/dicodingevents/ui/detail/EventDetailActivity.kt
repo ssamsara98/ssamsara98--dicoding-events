@@ -120,13 +120,16 @@ class EventDetailActivity : AppCompatActivity() {
     private fun setEventItem(eventItem: EventItem?) {
         if (eventItem == null) return
 
-        val quota = "Quota: ${eventItem.quota}"
-        val registrants = "Pendaftar: ${eventItem.registrants}"
-        val quotaRemain = "Sisa Kuota: ${(eventItem.quota - eventItem.registrants)}"
+        val quota = getString(R.string.event_detail_quota, eventItem.quota)
+        val registrants = getString(R.string.event_detail_registrants, eventItem.registrants)
+        val quotaRemain = getString(
+            R.string.event_detail_quota_remain,
+            (eventItem.quota - eventItem.registrants)
+        )
 
-        val time = "${eventItem.beginTime} - ${eventItem.endTime}"
-        val owner = "Penyelenggara: ${eventItem.ownerName}"
-        val location = "Lokasi: ${eventItem.cityName}"
+        val time = getString(R.string.event_detail_time, eventItem.beginTime, eventItem.endTime)
+        val owner = getString(R.string.event_detail_owner, eventItem.ownerName)
+        val location = getString(R.string.event_detail_location, eventItem.cityName)
 
         with(binding) {
             Glide.with(this@EventDetailActivity).load(eventItem.mediaCover).into(ivMediaCover)

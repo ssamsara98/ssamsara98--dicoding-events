@@ -2,11 +2,11 @@ package com.ssamsara98.dicodingevents.ui.setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.ssamsara98.dicodingevents.data.DicodingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,16 +15,15 @@ class SettingViewModel
 constructor(
     private val repository: DicodingRepository
 ) : ViewModel() {
-    fun getThemeSettings() = repository.getThemeSetting().asLiveData()
 
-    fun saveThemeSetting(isDarkModeActive: Boolean) = viewModelScope.launch {
-        repository.saveThemeSetting(isDarkModeActive)
-    }
+    fun getDarkMode() = repository.getDarkMode().asLiveData().distinctUntilChanged()
 
-    fun getDailyReminderWorkId() =
-        repository.getDailyReminderWorkId().asLiveData()
+    fun saveDarkMode(isEnabled: Boolean) =
+        viewModelScope.launch { repository.saveDarkMode(isEnabled) }
 
-    fun saveDailyReminderWorkId(uuid: UUID?) = viewModelScope.launch {
-        repository.saveDailyReminderWorkId(uuid)
-    }
+    fun getDailyReminder() = repository.getDailyReminder().asLiveData().distinctUntilChanged()
+
+    fun saveDailyReminder(isEnabled: Boolean) =
+        viewModelScope.launch { repository.saveDailyReminder(isEnabled) }
+
 }

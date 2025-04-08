@@ -9,7 +9,6 @@ import com.ssamsara98.dicodingevents.data.room.FavoriteEventDao
 import com.ssamsara98.dicodingevents.util.ApiService
 import com.ssamsara98.dicodingevents.util.Event
 import com.ssamsara98.dicodingevents.util.Resource
-import java.util.UUID
 import javax.inject.Inject
 
 class DicodingRepository
@@ -20,7 +19,7 @@ constructor(
     private val favoriteEventDao: FavoriteEventDao
 ) {
 
-    /* Event Detail */
+    /* Dicoding Events */
     suspend fun getEventList(active: Int? = null, limit: Int? = null, q: String? = null) =
         apiService.getEventList(active = active, limit = limit, q = q)
 
@@ -48,13 +47,14 @@ constructor(
         }
 
     /* Setting */
-    fun getThemeSetting() = settingPreferences.getThemeSetting()
+    fun getDarkMode() = settingPreferences.getDarkMode()
 
-    suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
-        settingPreferences.saveThemeSetting(isDarkModeActive)
+    suspend fun saveDarkMode(isEnabled: Boolean) =
+        settingPreferences.saveDarkMode(isEnabled)
 
-    fun getDailyReminderWorkId() = settingPreferences.getDailyReminderWorkId()
+    fun getDailyReminder() = settingPreferences.getDailyReminder()
 
-    suspend fun saveDailyReminderWorkId(uuid: UUID?) =
-        settingPreferences.saveDailyReminderWorkId(uuid)
+    suspend fun saveDailyReminder(isEnabled: Boolean) =
+        settingPreferences.saveDailyReminder(isEnabled)
+
 }
