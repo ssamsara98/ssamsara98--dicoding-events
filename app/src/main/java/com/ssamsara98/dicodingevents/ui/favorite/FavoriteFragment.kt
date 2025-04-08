@@ -38,7 +38,7 @@ class FavoriteFragment : Fragment() {
         val root = binding.root
 
         favoriteViewModel?.apply {
-            this.getFavoriteEventList().observe(viewLifecycleOwner) {
+            getFavoriteEventList().observe(viewLifecycleOwner) {
                 if (it != null) {
                     when (it) {
                         is Resource.Loading -> {
@@ -59,10 +59,11 @@ class FavoriteFragment : Fragment() {
                     }
                 }
             }
+
             binding.root.setOnRefreshListener {
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
-                        this@apply.getFavoriteEventList()
+                        getFavoriteEventList()
                         binding.root.isRefreshing = false
                     }
                 }
@@ -105,8 +106,8 @@ class FavoriteFragment : Fragment() {
         binding.rvEvents.addItemDecoration(itemDecoration)
 
         val favoriteEventItemAdapter = FavoriteEventItemAdapter().apply {
-            this.submitList(favoriteEventEntityList)
-            this.setOnItemClickCallback(object : FavoriteEventItemAdapter.OnItemClickCallback {
+            submitList(favoriteEventEntityList)
+            setOnItemClickCallback(object : FavoriteEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: FavoriteEventEntity) {
                     val toEventDetailActivity =
                         FavoriteFragmentDirections.actionNavigationFavoriteToEventDetailActivity()

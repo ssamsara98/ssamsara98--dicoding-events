@@ -146,7 +146,7 @@ class EventDetailActivity : AppCompatActivity() {
 
             btnRegister.setOnClickListener {
                 val registerUrl = Intent(Intent.ACTION_VIEW, eventItem.link.toUri())
-                this@EventDetailActivity.startActivity(registerUrl)
+                startActivity(registerUrl)
             }
 
             fabFavorite.setOnClickListener {

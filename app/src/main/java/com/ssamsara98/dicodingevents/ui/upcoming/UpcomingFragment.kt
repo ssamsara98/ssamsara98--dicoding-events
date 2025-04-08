@@ -39,13 +39,13 @@ class UpcomingFragment : Fragment() {
             binding.root.setOnRefreshListener {
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
-                        this@apply.load()
+                        load()
                         binding.root.isRefreshing = false
                     }
                 }
             }
 
-            this.eventList.observe(viewLifecycleOwner) {
+            eventList.observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Loading -> {
                         showLoading(true)
@@ -86,8 +86,8 @@ class UpcomingFragment : Fragment() {
 
         val upcomingEventItemAdapter = UpcomingEventItemAdapter()
         upcomingEventItemAdapter.apply {
-            this.submitList(upcomingEventItemList)
-            this.setOnItemClickCallback(object :
+            submitList(upcomingEventItemList)
+            setOnItemClickCallback(object :
                 UpcomingEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
                     val toEventDetailActivity =

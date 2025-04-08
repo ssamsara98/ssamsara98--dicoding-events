@@ -35,7 +35,7 @@ class SearchEventItemAdapter :
         val eventItem = getItem(position)
         holder.bind(eventItem)
         holder.itemView.setOnClickListener { view ->
-            this.onItemClickCallback.onItemClicked(view, eventItem)
+            onItemClickCallback.onItemClicked(view, eventItem)
         }
     }
 

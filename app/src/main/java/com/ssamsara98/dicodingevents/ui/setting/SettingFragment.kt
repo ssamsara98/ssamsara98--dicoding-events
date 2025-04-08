@@ -44,7 +44,7 @@ class SettingFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         workManager = WorkManager.getInstance(requireActivity())
 
         settingViewModel?.apply {
-            this.getDarkMode().observe(viewLifecycleOwner) { isEnabled ->
+            getDarkMode().observe(viewLifecycleOwner) { isEnabled ->
                 binding.apply {
                     switchDarkMode.setOnCheckedChangeListener(null)
                     switchDarkMode.isChecked = isEnabled
@@ -52,7 +52,7 @@ class SettingFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 }
             }
 
-            this.getDailyReminder().observe(viewLifecycleOwner) { isEnabled ->
+            getDailyReminder().observe(viewLifecycleOwner) { isEnabled ->
                 binding.apply {
                     switchDailyReminder.setOnCheckedChangeListener(null)
                     switchDailyReminder.isChecked = isEnabled
@@ -110,7 +110,7 @@ class SettingFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
         periodicWorkRequest =
-            PeriodicWorkRequest.Builder(DailyReminderWorker::class.java, 15, TimeUnit.MINUTES)
+            PeriodicWorkRequest.Builder(DailyReminderWorker::class.java, 1, TimeUnit.DAYS)
                 .setConstraints(constraints)
                 .build()
         workManager.enqueueUniquePeriodicWork(

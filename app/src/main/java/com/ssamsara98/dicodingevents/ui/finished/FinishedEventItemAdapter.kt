@@ -32,10 +32,10 @@ class FinishedEventItemAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val eventItem = this.getItem(position)
+        val eventItem = getItem(position)
         holder.bind(eventItem)
         holder.itemView.setOnClickListener { view ->
-            this.onItemClickCallback.onItemClicked(view, eventItem)
+            onItemClickCallback.onItemClicked(view, eventItem)
         }
     }
 

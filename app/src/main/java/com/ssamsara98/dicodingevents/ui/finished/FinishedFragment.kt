@@ -39,13 +39,13 @@ class FinishedFragment : Fragment() {
             binding.root.setOnRefreshListener {
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
-                        this@apply.load()
+                        load()
                         binding.root.isRefreshing = false
                     }
                 }
             }
 
-            this.eventListFinished.observe(/* owner = */ viewLifecycleOwner) {
+            eventListFinished.observe(/* owner = */ viewLifecycleOwner) {
                 when (it) {
                     is Resource.Loading -> {
                         showLoading(true)
@@ -84,8 +84,8 @@ class FinishedFragment : Fragment() {
 
         val finishedEventItemAdapter = FinishedEventItemAdapter()
         finishedEventItemAdapter.apply {
-            this.submitList(finishedEventItemList)
-            this.setOnItemClickCallback(object : FinishedEventItemAdapter.OnItemClickCallback {
+            submitList(finishedEventItemList)
+            setOnItemClickCallback(object : FinishedEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
                     val toEventDetailActivity =
                         FinishedFragmentDirections.actionNavigationFinishedToEventDetailActivity()

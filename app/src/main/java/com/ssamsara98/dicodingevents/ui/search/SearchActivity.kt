@@ -45,11 +45,11 @@ class SearchActivity : AppCompatActivity() {
         searchViewModel.apply {
             lifecycleScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
-                    args?.let { this@apply.fetchSearch(it.q) }
+                    args?.let { fetchSearch(it.q) }
                 }
             }
 
-            this.eventList.observe(this@SearchActivity) {
+            eventList.observe(this@SearchActivity) {
                 when (it) {
                     is Resource.Loading -> {
                         showLoading(true)
@@ -70,15 +70,15 @@ class SearchActivity : AppCompatActivity() {
             }
 
             with(binding.svQuery) {
-                this.isSubmitButtonEnabled = true
-                args?.let { this.setQuery(it.q, false) }
-                this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                isSubmitButtonEnabled = true
+                setQuery(args?.q, false)
+                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextChange(newText: String?): Boolean = true
                     override fun onQueryTextSubmit(q: String?): Boolean {
                         if (q == null || q == "") return false
                         lifecycleScope.launch(Dispatchers.Default) {
                             withContext(Dispatchers.Main) {
-                                this@apply.fetchSearch(q)
+                                fetchSearch(q)
                             }
                         }
                         return true
@@ -100,12 +100,12 @@ class SearchActivity : AppCompatActivity() {
 
         val searchEventItemAdapter = SearchEventItemAdapter()
         searchEventItemAdapter.apply {
-            this.submitList(eventItemList)
-            this.setOnItemClickCallback(object : SearchEventItemAdapter.OnItemClickCallback {
+            submitList(eventItemList)
+            setOnItemClickCallback(object : SearchEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
                     val intent = Intent(this@SearchActivity, EventDetailActivity::class.java)
                     intent.putExtra(EventDetailActivity.EVENT_ITEM, data)
-                    this@SearchActivity.startActivity(intent)
+                    startActivity(intent)
                 }
             })
         }

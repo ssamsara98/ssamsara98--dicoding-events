@@ -40,13 +40,13 @@ class HomeFragment : Fragment() {
             binding.root.setOnRefreshListener {
                 lifecycleScope.launch(Dispatchers.Default) {
                     withContext(Dispatchers.Main) {
-                        this@apply.load()
+                        load()
                         binding.root.isRefreshing = false
                     }
                 }
             }
 
-            this.upcomingEventList.observe(viewLifecycleOwner) {
+            upcomingEventList.observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Loading -> {
                         showUpcomingLoading(true)
@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            this.finishedEventList.observe(viewLifecycleOwner) {
+            finishedEventList.observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Loading -> {
                         showFinishedLoading(true)
@@ -88,8 +88,8 @@ class HomeFragment : Fragment() {
         }
 
         with(binding.svQuery) {
-            this.isSubmitButtonEnabled = true
-            this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            isSubmitButtonEnabled = true
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean = true
                 override fun onQueryTextSubmit(q: String?): Boolean {
                     if (q == null || q == "") return false
@@ -120,8 +120,8 @@ class HomeFragment : Fragment() {
 
         val upcomingEventItemAdapter = UpcomingEventItemAdapter()
         upcomingEventItemAdapter.apply {
-            this.submitList(upcomingEventList)
-            this.setOnItemClickCallback(object :
+            submitList(upcomingEventList)
+            setOnItemClickCallback(object :
                 UpcomingEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
                     val toEventDetailActivity =
@@ -148,8 +148,8 @@ class HomeFragment : Fragment() {
 
         val finishedEventItemAdapter = FinishedEventItemAdapter()
         finishedEventItemAdapter.apply {
-            this.submitList(finishedEventList)
-            this.setOnItemClickCallback(object :
+            submitList(finishedEventList)
+            setOnItemClickCallback(object :
                 FinishedEventItemAdapter.OnItemClickCallback {
                 override fun onItemClicked(view: View, data: EventItem) {
                     val toEventDetailActivity =
